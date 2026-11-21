@@ -7,7 +7,7 @@ Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 - `main` tiene 4 PR fusionados: #1 y #2 (Jaziel), #3 (Yeudiel) y #4 (Luis).
 - La app abre en local y en GitHub Pages con `?demo=1`: https://jazyelae.github.io/alertavecinal/
 - Único 404: `js/estadisticas.js` (de Yeudiel, pendiente). El cargador lo ignora.
-- La carpeta `apps-script/` aún no existe; el push vive en `scripts/apps-script/Codigo.gs`.
+- El push publicado sigue en `scripts/apps-script/Codigo.gs` (`PUSH_ENDPOINT`). El backend nuevo está en `apps-script/` y se despliega aparte (`URL_BACKEND`) hasta que Luis suba `Push.gs`.
 - No hay secretos en el historial (ninguna `BEGIN PRIVATE KEY`).
 - `clasp` no está instalado en la PC de Jaziel (se necesita para el despliegue).
 
@@ -15,8 +15,8 @@ Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 | # | Commit | Estado | Notas |
 |---|---|---|---|
 | — | Aplicación web base · Conversión a PWA · Alerta sin señal · Documentación SP4 | ✅ | Unidad anterior, ya en `main` |
-| 1 | `docs: kit de especificaciones Unidad II` | 🛑 | PR abierto; fusionar primero |
-| 2 | Backend: núcleo de Apps Script (router, Firestore y sesión) | ⬜ | `apps-script/appsscript.json`, `Comun.gs` |
+| 1 | `docs: kit de especificaciones Unidad II` | ✅ | PR #5 fusionado el 21/11 |
+| 2 | Backend: núcleo de Apps Script (router, Firestore y sesión) | 🛑 | PR abierto. Prueba local 13/13. Ya pueden programar `Push.gs`, `MapaCalor.gs` y `Verificado.gs` contra los contratos de `Comun.gs` |
 | 3 | Vista de servidor: boletín público de alertas | ⬜ | `Boletin.gs`, `vista_boletin.html` |
 | 4 | Backend de la aportación Alerta sin señal | ⬜ | `SinSenal.gs` + `js/offline-sync.js` |
 | 5 | Dispositivo: cámara, vibración y compartir en alertas | ⬜ | `js/alertas.js`, `firestore.rules`, `sw.js` |
