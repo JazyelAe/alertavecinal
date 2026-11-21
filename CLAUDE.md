@@ -7,8 +7,8 @@ Idioma de todo (código, comentarios, commits, PR, documentos): **español**.
 | # | Integrante | GitHub | Rama | Matrícula |
 |---|---|---|---|---|
 | 1 | Serrano Arana Jahir Jaziel | `JazyelAe` (dueño del repo) | `jaziel` | 2311080845 |
-| 2 | Xicali Diaz Luis Alberto | `LuisAlbertoXicaliDiaz` | `luis` | (por confirmar) |
-| 3 | Gonzalez Barrios Yeudiel Nain | `yeudev-utp` | `yeudiel` | (por confirmar) |
+| 2 | Xicali Diaz Luis Alberto | `LuisAlbertoXicaliDiaz` | `luis` | 2311081407 |
+| 3 | Gonzalez Barrios Yeudiel Nain | `yeudev-utp` | `yeudiel` | 2311081344 |
 
 Materia: Aplicaciones Web Progresivas · Profesora: **Mather Xóchitl Mendoza Piscil** · Grupo **10° D** · Universidad Tecnológica de Puebla · División de Tecnologías de la Información · Ingeniería en Desarrollo y Gestión de Software.
 Si falta una matrícula o un usuario de GitHub, **pregúntaselo al integrante** y actualiza esta tabla en su propio commit.

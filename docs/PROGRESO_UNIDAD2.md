@@ -11,6 +11,21 @@ Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 - No hay secretos en el historial (ninguna `BEGIN PRIVATE KEY`).
 - `clasp` no está instalado en la PC de Jaziel (se necesita para el despliegue).
 
+## ▶ Siguiente paso de cada quien (léelo primero)
+Antes de empezar: `git checkout <tu rama>` → `git pull origin main`.
+
+- **Luis:** tus commits 1 (mapa), 2 (push con FCM) y 3 (mapa de calor) **ya están en `main`** (PR #4). No los repitas. Te falta:
+  1. **Completar el push en el backend nuevo:** crear `apps-script/Push.gs` con `accion_push(datos)`, migrando `scripts/apps-script/Codigo.gs` según el contrato al inicio de `apps-script/Comun.gs`. Además, agregar `vibrate` a las notificaciones de `sw-push.js` (spec 02). Después puedes retirar `scripts/apps-script/Codigo.gs`.
+  2. Commit 4: vista de servidor del mapa de calor (`MapaCalor.gs` + `vista_mapacalor.html`, enlace desde `js/heatmap.js`).
+  3. Tu sección `docs/producto2/luis.md` y, cuando Jaziel lo indique, tus PDF (SP6 primero).
+- **Yeudiel:** tus commits 1 (panel de administración) y 2 (botón de instalar) ya están en `main` (PR #3). Te falta:
+  1. **Vecino Verificado Pro con datos reales:** `estadisticas.html` + `js/estadisticas.js`. Hoy la app da 404 al buscar `js/estadisticas.js`.
+  2. Vista de servidor de la ficha (`Verificado.gs` + `vista_verificado.html`).
+  3. `README.md` (al final), tu sección `docs/producto2/yeudiel.md` y tus PDF (SP5 primero).
+- **Jaziel:** boletín (vista de servidor), backend de Alerta sin señal, dispositivo (cámara, vibración y compartir), persistencia offline y, al final, el despliegue y el Producto 2.
+
+En cada PR, avisen si Jaziel debe hacer `clasp push` y una nueva implementación.
+
 ## Jaziel (`jaziel`)
 | # | Commit | Estado | Notas |
 |---|---|---|---|
@@ -43,6 +58,5 @@ Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 | 4 | Vista de servidor: ficha de Vecino Verificado | ⬜ | `Verificado.gs`, `vista_verificado.html`; depende del núcleo |
 | 5 | Documentación Subproducto 5 y README | ⬜ | |
 
-## Datos del equipo pendientes de confirmar
-- Matrícula de Luis (su correo institucional sugiere 2311081407).
-- Matrícula de Yeudiel (su correo institucional sugiere 2311081344).
+## Datos del equipo
+- Matrículas confirmadas por Jaziel el 21/11/2026: Luis 2311081407 · Yeudiel 2311081344 (ya en `CLAUDE.md`).
