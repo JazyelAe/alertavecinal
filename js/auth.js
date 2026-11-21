@@ -10,7 +10,8 @@ import {
   signInWithEmailAndPassword, signOut, updateProfile
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {
-  getFirestore, doc, setDoc, onSnapshot, serverTimestamp
+  getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+  doc, setDoc, onSnapshot, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 // Espacio de nombres compartido entre módulos (cada uno agrega lo suyo).
@@ -21,7 +22,22 @@ export const sinConfigurar = Boolean(self.FIREBASE_SIN_CONFIGURAR);
 
 export const app = initializeApp(self.FIREBASE_CONFIG);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = crearFirestore();
+
+// Datos offline: con la caché persistente, Firestore guarda en IndexedDB los documentos que ya
+// leyó. En modo avión la lista de alertas sigue visible y lo que se escriba se envía al volver
+// la red. persistentMultipleTabManager permite tener la app abierta en varias pestañas.
+// Si el navegador no lo permite (por ejemplo, una ventana privada), se usa la memoria como antes.
+function crearFirestore() {
+  try {
+    return initializeFirestore(app, {
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+    });
+  } catch (error) {
+    console.warn('[Firestore] Sin caché persistente; se usa la memoria:', error.message);
+    return getFirestore(app);
+  }
+}
 
 const $ = (id) => document.getElementById(id);
 

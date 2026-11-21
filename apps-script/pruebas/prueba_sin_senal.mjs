@@ -80,7 +80,21 @@ prueba('Datos inválidos → «rechazadas» con el motivo; las válidas del mism
     'Tipo de alerta no válido', 'La descripción debe tener de 1 a 500 caracteres',
     'La descripción debe tener de 1 a 500 caracteres', 'Ubicación no válida', 'idCola no válido'
   ]);
-  assert.equal([...fs.docs.keys()].filter((k) => k.startsWith('alertas/')).length, 2);
+  assert.equal([...fs.docs.keys()].filter((k) => k.startsWith('alertas/')).length, 2);   // antes de la prueba de fotos
+});
+
+prueba('Foto de la cámara: JPEG válido se guarda; otro formato o demasiado grande se rechaza', () => {
+  const jpeg = 'data:image/jpeg;base64,' + 'A'.repeat(2000);
+  const conFoto = post({ accion: 'alerta_sin_senal', idToken: tokenAna, alertas: [
+    alerta('sin-senal-foto0001', { foto: jpeg }),
+    alerta('sin-senal-foto0002', { foto: 'data:image/png;base64,AAAA' }),
+    alerta('sin-senal-foto0003', { foto: 'data:image/jpeg;base64,' + 'A'.repeat(300000) }),
+    alerta('sin-senal-foto0004', { foto: 'data:image/jpeg;base64,<script>' })
+  ] });
+  assert.deepEqual([...conFoto.aceptadas], ['sin-senal-foto0001']);
+  assert.equal(conFoto.rechazadas.length, 3);
+  assert.ok(conFoto.rechazadas.every((x) => /Foto no válida/.test(x.error)));
+  assert.equal(leer('sin-senal-foto0001').foto, jpeg);
 });
 
 prueba('Sin Push.gs, responde pushEnviado: false (la app pide el push por su cuenta)', () => {

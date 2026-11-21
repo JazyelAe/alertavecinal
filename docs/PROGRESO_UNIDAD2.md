@@ -32,10 +32,10 @@ En cada PR, avisen si Jaziel debe hacer `clasp push` y una nueva implementación
 | — | Aplicación web base · Conversión a PWA · Alerta sin señal · Documentación SP4 | ✅ | Unidad anterior, ya en `main` |
 | 1 | `docs: kit de especificaciones Unidad II` | ✅ | PR #5 fusionado el 21/11 |
 | 2 | Backend: núcleo de Apps Script (router, Firestore y sesión) | ✅ | PR #6. Prueba local 13/13 |
-| 3 | Vista de servidor: boletín público de alertas | 🛑 | PR abierto. Prueba local 9/9; enlace «Boletín» si hay `URL_BACKEND` |
-| 4 | Backend de la aportación Alerta sin señal | 🛑 | Mismo PR. Prueba local 8/8; respaldo directo a Firestore si no hay backend |
-| 5 | Dispositivo: cámara, vibración y compartir en alertas | ⬜ | `js/alertas.js`, `firestore.rules`, `sw.js` |
-| 6 | Datos offline: persistencia de Firestore | ⬜ | |
+| 3 | Vista de servidor: boletín público de alertas | ✅ | PR #7. Prueba local 9/9 |
+| 4 | Backend de la aportación Alerta sin señal | ✅ | PR #7. Prueba local 9/9 (incluye la foto) |
+| 5 | Dispositivo: cámara, vibración y compartir en alertas | 🛑 | PR abierto. Playwright 13/13. Falta publicar `firestore.rules` y probar en el teléfono |
+| 6 | Datos offline: persistencia de Firestore | 🛑 | Mismo PR. Caché `persistent` verificada |
 | — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | ⬜ | Cuando Luis y Yeudiel fusionen sus partes |
 | 7 | Documentación Producto 2 | ⬜ | `entregables/Producto2_AlertaVecinal_Equipo.pdf` |
 | — | PDF individuales SP4–SP7 | ⬜ | Solo cuando Jaziel lo indique |
