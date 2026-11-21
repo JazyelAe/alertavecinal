@@ -34,8 +34,8 @@ En cada PR, avisen si Jaziel debe hacer `clasp push` y una nueva implementación
 | 2 | Backend: núcleo de Apps Script (router, Firestore y sesión) | ✅ | PR #6. Prueba local 13/13 |
 | 3 | Vista de servidor: boletín público de alertas | ✅ | PR #7. Prueba local 9/9 |
 | 4 | Backend de la aportación Alerta sin señal | ✅ | PR #7. Prueba local 9/9 (incluye la foto) |
-| 5 | Dispositivo: cámara, vibración y compartir en alertas | 🛑 | PR abierto. Playwright 13/13. Falta publicar `firestore.rules` y probar en el teléfono |
-| 6 | Datos offline: persistencia de Firestore | 🛑 | Mismo PR. Caché `persistent` verificada |
+| 5 | Dispositivo: cámara, vibración y compartir en alertas | ✅ | PR #8 (Pages en v6). Falta: Jaziel publica `firestore.rules` y prueba en su teléfono |
+| 6 | Datos offline: persistencia de Firestore | ✅ | PR #8. Caché `persistent` verificada |
 | — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | ⬜ | Cuando Luis y Yeudiel fusionen sus partes |
 | 7 | Documentación Producto 2 | ⬜ | `entregables/Producto2_AlertaVecinal_Equipo.pdf` |
 | — | PDF individuales SP4–SP7 | ⬜ | Solo cuando Jaziel lo indique |
