@@ -31,9 +31,9 @@ En cada PR, avisen si Jaziel debe hacer `clasp push` y una nueva implementación
 |---|---|---|---|
 | — | Aplicación web base · Conversión a PWA · Alerta sin señal · Documentación SP4 | ✅ | Unidad anterior, ya en `main` |
 | 1 | `docs: kit de especificaciones Unidad II` | ✅ | PR #5 fusionado el 21/11 |
-| 2 | Backend: núcleo de Apps Script (router, Firestore y sesión) | 🛑 | PR abierto. Prueba local 13/13. Ya pueden programar `Push.gs`, `MapaCalor.gs` y `Verificado.gs` contra los contratos de `Comun.gs` |
-| 3 | Vista de servidor: boletín público de alertas | ⬜ | `Boletin.gs`, `vista_boletin.html` |
-| 4 | Backend de la aportación Alerta sin señal | ⬜ | `SinSenal.gs` + `js/offline-sync.js` |
+| 2 | Backend: núcleo de Apps Script (router, Firestore y sesión) | ✅ | PR #6. Prueba local 13/13 |
+| 3 | Vista de servidor: boletín público de alertas | 🛑 | PR abierto. Prueba local 9/9; enlace «Boletín» si hay `URL_BACKEND` |
+| 4 | Backend de la aportación Alerta sin señal | 🛑 | Mismo PR. Prueba local 8/8; respaldo directo a Firestore si no hay backend |
 | 5 | Dispositivo: cámara, vibración y compartir en alertas | ⬜ | `js/alertas.js`, `firestore.rules`, `sw.js` |
 | 6 | Datos offline: persistencia de Firestore | ⬜ | |
 | — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | ⬜ | Cuando Luis y Yeudiel fusionen sus partes |
