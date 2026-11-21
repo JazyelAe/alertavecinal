@@ -14,7 +14,7 @@
  */
 
 // Versión de la caché. Al cambiarla, "activate" borra las cachés viejas.
-const VERSION = 'v4';
+const VERSION = 'v5';
 // Nombre versionado de la caché principal (app shell).
 const CACHE_ESTATICA = `alertavecinal-${VERSION}`;
 // Caché aparte para los mosaicos (imágenes) del mapa de OpenStreetMap.

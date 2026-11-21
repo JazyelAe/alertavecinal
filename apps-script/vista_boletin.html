@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- Plantilla de Apps Script: <?= ?> escribe un valor (escapado) y <? ?> ejecuta código EN EL SERVIDOR. -->
+  <?!= estilosComunes_() ?>
+  <style>
+    .resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+    .cifra{font-size:2rem;font-weight:800;color:var(--azul)}
+    .punto{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:currentColor}
+    .nota{color:var(--texto-suave);font-size:.9rem}
+    .etiqueta{font-size:.75rem;background:#eef3f8;border-radius:10px;padding:2px 8px;margin-left:6px;color:var(--azul-claro)}
+  </style>
+</head>
+<body>
+  <header><span class="logo">AV</span><b>AlertaVecinal</b> · Boletín público de alertas</header>
+  <main>
+    <div class="tarjeta">
+      <h1>Boletín de seguridad vecinal</h1>
+      <p class="nota">Resumen público de las alertas enviadas por los vecinos. Para proteger su privacidad
+        no se muestran nombres, descripciones ni ubicaciones exactas: solo el tipo y la zona aproximada.</p>
+      <div class="resumen">
+        <div class="tarjeta"><div class="cifra"><?= datos.total24h ?></div>alertas en las últimas 24 h</div>
+        <div class="tarjeta"><div class="cifra"><?= datos.total7d ?></div>alertas en los últimos 7 días</div>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Por tipo</h2>
+      <table>
+        <tr><th>Tipo</th><th>24 horas</th><th>7 días</th></tr>
+        <? for (var i = 0; i < datos.porTipo7d.length; i++) { ?>
+          <tr>
+            <td class="<?= datos.porTipo7d[i].tipo ?>"><span class="punto"></span><?= datos.porTipo7d[i].nombre ?></td>
+            <td><?= datos.porTipo24h[i].total ?></td>
+            <td><?= datos.porTipo7d[i].total ?></td>
+          </tr>
+        <? } ?>
+      </table>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Últimas 24 horas</h2>
+      <? if (!datos.lista.length) { ?>
+        <p class="nota">Sin alertas en las últimas 24 horas.</p>
+      <? } else { ?>
+        <table>
+          <tr><th>Tipo</th><th>Zona aproximada</th><th>Cuándo</th></tr>
+          <? for (var j = 0; j < datos.lista.length; j++) { var a = datos.lista[j]; ?>
+            <tr>
+              <td class="<?= a.tipo ?>"><span class="punto"></span><?= a.nombre ?>
+                <? if (a.sinSenal) { ?><span class="etiqueta">enviada sin señal</span><? } ?></td>
+              <td><?= a.zona ?></td>
+              <td><?= a.hace ?></td>
+            </tr>
+          <? } ?>
+        </table>
+      <? } ?>
+    </div>
+    <p style="text-align:center"><a href="https://jazyelae.github.io/alertavecinal/">Abrir la aplicación AlertaVecinal</a></p>
+  </main>
+  <footer class="ssr">Generado en el servidor (Google Apps Script) el <?= datos.generadoEn ?>.</footer>
+</body>
+</html>
