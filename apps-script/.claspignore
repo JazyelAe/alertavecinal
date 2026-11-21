@@ -1,0 +1,6 @@
+# clasp solo sube a Google el código del backend: archivos .gs, plantillas .html y el manifiesto.
+**/**
+!*.gs
+!*.html
+!appsscript.json
+pruebas/**

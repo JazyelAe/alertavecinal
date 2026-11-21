@@ -20,3 +20,7 @@ reportes/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Apps Script (clasp): guarda el ID del proyecto y las credenciales locales; no se suben
+.clasp.json
+.clasprc.json
