@@ -6,6 +6,8 @@
  *      la app esté cerrada (Chrome, Edge, Android).
  *   2) Respaldo: en navegadores sin Background Sync (Firefox, Safari)
  *      la página la envía al dispararse el evento "online".
+ * Con URL_BACKEND configurada, ambos caminos pasan primero por el backend
+ * (apps-script/SinSenal.gs); si no responde, escriben directo a Firestore.
  */
 import { getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { auth, db, esDemo, onSesion, aviso } from './auth.js';
@@ -56,6 +58,37 @@ export async function encolar(datos) {
   await pintarPendientes();
 }
 
+/* ---------- Envío por el backend (apps-script/SinSenal.gs) ---------- */
+// Si hay URL_BACKEND, las alertas pasan por el servidor: valida la sesión, evita
+// duplicados y les pone la hora del servidor. Devuelve cuántas salieron de la cola,
+// o null si el backend no está disponible (entonces se usa el envío directo).
+export async function enviarPorBackend(lista, idToken) {
+  if (!self.URL_BACKEND || esDemo || !lista.length || !idToken) return null;
+  try {
+    const respuesta = await fetch(self.URL_BACKEND, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // sin verificación CORS previa
+      body: JSON.stringify({
+        accion: 'alerta_sin_senal', idToken,
+        alertas: lista.map((p) => ({ idCola: p.id, datos: p.datos, guardada: p.guardada }))
+      })
+    });
+    const r = await respuesta.json();
+    if (!r.ok) throw new Error(r.error || 'El backend rechazó la petición');
+    for (const id of [...r.aceptadas, ...r.repetidas]) await borrar(id);
+    for (const { id, error } of r.rechazadas) {
+      if (id) await borrar(id);   // datos inválidos: nunca se aceptarían
+      aviso(`Una alerta guardada sin señal no se pudo enviar: ${error}`, 'error', 6000);
+    }
+    // Si este backend todavía no hace el push, lo pide la app como siempre.
+    if (!r.pushEnviado) r.aceptadas.forEach((id) => window.AV.push?.enviarPushReal?.('alerta', id));
+    return r.aceptadas.length;
+  } catch (error) {
+    console.warn('[Sin señal] El backend no respondió; se envía directo a Firestore:', error.message);
+    return null;
+  }
+}
+
 /* ---------- Respaldo: enviar desde la página ---------- */
 let enviando = false;
 async function enviarDesdePagina() {
@@ -63,6 +96,11 @@ async function enviarDesdePagina() {
   enviando = true;
   let enviadas = 0;
   try {
+    // 1) Primero por el backend, con un token de sesión recién obtenido.
+    const lista = await pendientes();
+    const token = !esDemo && auth.currentUser ? await auth.currentUser.getIdToken().catch(() => null) : null;
+    enviadas += (await enviarPorBackend(lista, token)) || 0;
+    // 2) Lo que quede (sin backend o si falló), directo a Firestore como antes.
     for (const p of await pendientes()) {
       try {
         await window.AV.alertasApi.publicarAlerta({ ...p.datos, origen: 'sin-senal' }, p.id);

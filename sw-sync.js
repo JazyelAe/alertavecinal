@@ -4,8 +4,9 @@
  *
  * Cuando vuelve la conexión, el navegador dispara el evento "sync" con la
  * etiqueta "enviar-alertas" (aunque la app esté cerrada). Aquí leemos las
- * alertas guardadas en IndexedDB y las mandamos a Firestore usando su API
- * REST con el token de sesión del vecino.
+ * alertas guardadas en IndexedDB y las mandamos al backend (URL_BACKEND,
+ * apps-script/SinSenal.gs) o, si no hay backend, a Firestore por su API REST
+ * con el token de sesión del vecino.
  */
 importScripts('js/firebase-config.js');
 
@@ -43,11 +44,49 @@ function aCamposFirestore(datos, fecha) {
   return campos;
 }
 
+// Con URL_BACKEND: manda todas las alertas al backend (apps-script/SinSenal.gs), que valida
+// la sesión, evita duplicados y pone la hora del servidor. Devuelve cuántas se aceptaron,
+// o null si no hay backend o no respondió bien (entonces se usa el envío directo de abajo).
+async function enviarPorBackendDesdeSW(pendientes) {
+  const conToken = pendientes.filter((p) => p.idToken);
+  if (!self.URL_BACKEND || !conToken.length) return null;
+  const idToken = conToken.reduce((a, b) => (b.guardada > a.guardada ? b : a)).idToken;   // el más reciente
+  // Si no hay red, fetch lanza un error y el navegador reintentará el sync más tarde.
+  const respuesta = await fetch(self.URL_BACKEND, {
+    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      accion: 'alerta_sin_senal', idToken,
+      alertas: conToken.map((p) => ({ idCola: p.id, datos: p.datos, guardada: p.guardada }))
+    })
+  });
+  const r = await respuesta.json();
+  if (!r.ok) return null;   // por ejemplo, token vencido: lo intentará la página con uno nuevo
+  for (const id of [...r.aceptadas, ...r.repetidas, ...r.rechazadas.map((x) => x.id).filter(Boolean)]) {
+    await syncOperar('readwrite', (s) => s.delete(id));
+  }
+  // Si este backend todavía no hace el push, lo pedimos al intermediario de siempre.
+  if (!r.pushEnviado && self.PUSH_ENDPOINT) {
+    for (const id of r.aceptadas) {
+      await fetch(self.PUSH_ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ idToken, tipo: 'alerta', id })
+      }).catch(() => null);
+    }
+  }
+  return r.aceptadas.length;
+}
+
 async function enviarPendientesDesdeSW() {
-  const pendientes = await syncOperar('readonly', (s) => s.getAll());
-  const proyecto = self.FIREBASE_CONFIG.projectId;
   let enviadas = 0;
   let sinRed = false;
+  try {
+    enviadas += (await enviarPorBackendDesdeSW(await syncOperar('readonly', (s) => s.getAll()))) || 0;
+  } catch (error) {
+    sinRed = true;
+  }
+  // Lo que quede en la cola (sin backend o si no respondió bien), directo a Firestore como antes.
+  const pendientes = sinRed ? [] : await syncOperar('readonly', (s) => s.getAll());
+  const proyecto = self.FIREBASE_CONFIG.projectId;
 
   for (const p of pendientes) {
     if (!p.idToken) continue; // sin token: la enviará la página al abrirse

@@ -6,7 +6,7 @@
 import {
   collection, doc, setDoc, onSnapshot, query, orderBy, limit, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { db, esDemo, datosDemo, onSesion, aviso, aFecha } from './auth.js';
+import { db, esDemo, datosDemo, onSesion, aviso, aFecha, agregarMenu } from './auth.js';
 
 // Catálogo de tipos (lo reutilizan mapa.js, heatmap.js y estadisticas.js).
 export const TIPOS = {
@@ -185,7 +185,26 @@ async function enviarAlerta(e) {
   }
 }
 
+/* ---------- Boletín público (vista generada en el servidor) ---------- */
+// La página la arma Google Apps Script (apps-script/Boletin.gs) con datos de Firestore.
+// Es de otro origen, así que no se guarda en caché: sin conexión avisamos en lugar de abrirla.
+function agregarEnlaceBoletin() {
+  if (!self.URL_BACKEND) return;
+  const li = agregarMenu({ id: 'menu-boletin', texto: 'Boletín', href: self.URL_BACKEND + '?vista=boletin' });
+  const enlace = (li || document.getElementById('menu-boletin'))?.querySelector('a');
+  if (!enlace) return;
+  enlace.target = '_blank';
+  enlace.rel = 'noopener';
+  enlace.addEventListener('click', (e) => {
+    if (!navigator.onLine) {
+      e.preventDefault();
+      aviso('El boletín se genera en el servidor y necesita conexión a Internet.', 'info');
+    }
+  });
+}
+
 /* ---------- Arranque ---------- */
+agregarEnlaceBoletin();
 $('btn-ubicacion')?.addEventListener('click', obtenerUbicacion);
 $('form-alerta')?.addEventListener('submit', enviarAlerta);
 
