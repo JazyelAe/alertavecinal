@@ -123,6 +123,18 @@
               <button id="btn-ubicacion" class="btn btn-claro" type="button">Obtener mi ubicación</button>
               <span id="alerta-ubicacion-texto" class="nota">Sin ubicación todavía</span>
             </div>
+            <!-- Cámara: en el teléfono "capture" abre la cámara trasera; en la computadora, el selector de archivos. -->
+            <div class="foto-campo">
+              <label class="btn btn-claro" for="alerta-foto">📷 Agregar foto (opcional)</label>
+              <input id="alerta-foto" type="file" accept="image/*" capture="environment" hidden>
+              <div id="foto-previa" class="foto-previa" hidden>
+                <img id="foto-previa-img" alt="Vista previa de la foto de la alerta">
+                <div>
+                  <span id="foto-peso" class="nota"></span>
+                  <button id="btn-quitar-foto" class="btn btn-claro btn-chico" type="button">Quitar foto</button>
+                </div>
+              </div>
+            </div>
             <button id="btn-enviar-alerta" class="btn btn-alerta" type="submit">Enviar alerta</button>
           </form>
         </article>

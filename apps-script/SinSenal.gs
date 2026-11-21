@@ -68,6 +68,12 @@ function alertaSinSenal_(datos, guardada, sesion) {
     documento.lng = lng;
   }
   if (d.direccion) documento.direccion = String(d.direccion).slice(0, 200);
+  if (d.foto != null) {   // foto opcional de la cámara: mismas reglas que firestore.rules
+    if (typeof d.foto !== 'string' || d.foto.length > 300000 || !/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(d.foto)) {
+      throw new Error('Foto no válida (debe ser JPEG de máximo ~220 KB)');
+    }
+    documento.foto = d.foto;
+  }
   const fechaCola = new Date(Number(guardada));
   if (!isNaN(fechaCola.getTime())) documento.guardadaEn = fechaCola;
   return documento;

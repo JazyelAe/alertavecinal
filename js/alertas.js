@@ -20,6 +20,8 @@ window.AV.TIPOS = TIPOS;
 const $ = (id) => document.getElementById(id);
 let alertas = [];
 let ubicacion = null;          // { lat, lng, direccion }
+let foto = null;               // data-URL JPEG ya comprimida (cámara) o null
+let idsConocidos = null;       // ids de alertas ya vistas (para vibrar solo con las nuevas)
 let dejarDeEscuchar = null;
 const idResaltada = new URLSearchParams(location.search).get('alerta');
 
@@ -34,9 +36,16 @@ export async function publicarAlerta(datos, id = doc(collection(db, 'alertas')).
   // Si existe el módulo de push, avisa a los demás celulares (sin esperar la respuesta).
   window.AV.push?.enviarPushReal?.('alerta', id);
 }
-window.AV.alertasApi = { publicarAlerta, TIPOS };
+// Solo en modo demo: simula que llega una alerta de OTRO vecino (para probar la vibración).
+function recibirDemo(datos) {
+  if (!esDemo) return;
+  alertas = [{ id: 'demo-recibida-' + Date.now(), uid: 'otro-vecino', creado: new Date(), ...datos }, ...alertas];
+  notificarCambio();
+}
+window.AV.alertasApi = { publicarAlerta, TIPOS, recibirDemo };
 
 function notificarCambio() {
+  vibrarSiHayNuevas(alertas);
   window.AV.alertas = alertas;
   pintarLista();
   document.dispatchEvent(new CustomEvent('av:alertas', { detail: alertas }));
@@ -84,20 +93,18 @@ function pintarLista() {
     const meta = document.createElement('div');
     meta.className = 'alerta-meta';
     meta.textContent = `${a.direccion || 'Sin dirección'} · ${a.nombre || 'Vecino'}`;
-    li.append(cabeza, texto, meta);
+    li.append(cabeza, texto);
+    if (esFotoValida(a.foto)) li.appendChild(miniatura(a.foto, tipo.nombre));
+    li.appendChild(meta);
 
+    const acciones = document.createElement('div');
+    acciones.className = 'alerta-acciones';
     if (typeof a.lat === 'number') {
-      const acciones = document.createElement('div');
-      acciones.className = 'alerta-acciones';
-      const verMapa = document.createElement('button');
-      verMapa.type = 'button';
-      verMapa.className = 'btn btn-claro btn-chico';
-      verMapa.textContent = 'Ver en el mapa';
-      verMapa.addEventListener('click', () =>
-        document.dispatchEvent(new CustomEvent('av:enfocar', { detail: a })));
-      acciones.appendChild(verMapa);
-      li.appendChild(acciones);
+      acciones.appendChild(botonChico('Ver en el mapa', () =>
+        document.dispatchEvent(new CustomEvent('av:enfocar', { detail: a }))));
     }
+    acciones.appendChild(botonChico('Compartir', () => compartirAlerta(a)));
+    li.appendChild(acciones);
     lista.appendChild(li);
   }
   // Si llegamos desde una notificación (?alerta=ID), la mostramos.
@@ -118,6 +125,128 @@ function escucharAlertas() {
     console.error('Error al escuchar alertas:', error);
     aviso('No se pudieron cargar las alertas.', 'error');
   });
+}
+
+function botonChico(texto, alPulsar) {
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.className = 'btn btn-claro btn-chico';
+  boton.textContent = texto;
+  boton.addEventListener('click', alPulsar);
+  return boton;
+}
+
+/* ---------- Cámara: foto de evidencia ---------- */
+// Solo aceptamos JPEG en data-URL (igual que firestore.rules).
+const esFotoValida = (f) => typeof f === 'string' && f.startsWith('data:image/jpeg;base64,');
+const LADO_MAXIMO = 800;            // px
+const PESO_OBJETIVO = 150 * 1024;   // bytes
+const pesoDe = (dataUrl) => Math.round((dataUrl.length - dataUrl.indexOf(',') - 1) * 3 / 4);
+
+// Reduce la foto en el propio teléfono con <canvas> y la convierte en JPEG.
+// Así cabe dentro del documento de Firestore (Firebase Storage pide el plan de pago).
+async function comprimirFoto(archivo) {
+  const imagen = await createImageBitmap(archivo);
+  const escala = Math.min(1, LADO_MAXIMO / Math.max(imagen.width, imagen.height));
+  const lienzo = document.createElement('canvas');
+  lienzo.width = Math.round(imagen.width * escala);
+  lienzo.height = Math.round(imagen.height * escala);
+  lienzo.getContext('2d').drawImage(imagen, 0, 0, lienzo.width, lienzo.height);
+  imagen.close?.();
+  let calidad = 0.6;
+  let resultado = lienzo.toDataURL('image/jpeg', calidad);
+  while (pesoDe(resultado) > PESO_OBJETIVO && calidad > 0.4) {
+    calidad = Math.round((calidad - 0.1) * 10) / 10;
+    resultado = lienzo.toDataURL('image/jpeg', calidad);
+  }
+  return resultado;
+}
+
+async function alElegirFoto(e) {
+  const archivo = e.target.files?.[0];
+  if (!archivo) return;
+  if (!archivo.type.startsWith('image/')) return aviso('El archivo no es una imagen.', 'error');
+  try {
+    foto = await comprimirFoto(archivo);
+    $('foto-previa-img').src = foto;
+    $('foto-peso').textContent = `Foto lista: ${Math.round(pesoDe(foto) / 1024)} KB`;
+    $('foto-previa').hidden = false;
+  } catch (error) {
+    console.error(error);
+    foto = null;
+    aviso('No se pudo procesar la foto. Intenta con otra.', 'error');
+  }
+}
+
+function quitarFoto() {
+  foto = null;
+  if ($('alerta-foto')) $('alerta-foto').value = '';
+  if ($('foto-previa')) $('foto-previa').hidden = true;
+}
+
+function miniatura(dataUrl, tipoNombre) {
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.className = 'alerta-foto';
+  boton.setAttribute('aria-label', 'Ver la foto en grande');
+  const img = document.createElement('img');
+  img.src = dataUrl;
+  img.alt = `Foto de la alerta: ${tipoNombre}`;
+  img.loading = 'lazy';
+  boton.appendChild(img);
+  boton.addEventListener('click', () => verFotoGrande(dataUrl, img.alt));
+  return boton;
+}
+
+function verFotoGrande(dataUrl, texto) {
+  let dialogo = $('dialogo-foto');
+  if (!dialogo) {
+    dialogo = document.createElement('dialog');
+    dialogo.id = 'dialogo-foto';
+    dialogo.className = 'foto-grande';
+    dialogo.innerHTML = '<img alt=""><form method="dialog"><button class="btn btn-claro btn-chico">Cerrar</button></form>';
+    dialogo.addEventListener('click', (e) => { if (e.target === dialogo) dialogo.close(); });
+    document.body.appendChild(dialogo);
+  }
+  const img = dialogo.querySelector('img');
+  img.src = dataUrl;
+  img.alt = texto;
+  dialogo.showModal();
+}
+
+/* ---------- Vibración al llegar una alerta nueva ---------- */
+// Solo con alertas NUEVAS de otros vecinos (no al cargar la lista ni con las propias).
+// iOS no tiene navigator.vibrate: ahí simplemente no vibra.
+function vibrarSiHayNuevas(lista) {
+  const miUid = window.AV.sesion?.usuario?.uid;
+  if (idsConocidos) {
+    const nuevas = lista.filter((a) => !idsConocidos.has(a.id) && a.uid !== miUid);
+    if (nuevas.length && 'vibrate' in navigator) navigator.vibrate([200, 100, 200]);
+  }
+  // Mientras la lista esté vacía (todavía cargando) no fijamos el punto de partida.
+  if (lista.length) idsConocidos = new Set(lista.map((a) => a.id));
+}
+
+/* ---------- Compartir (menú nativo del teléfono) ---------- */
+async function compartirAlerta(a) {
+  const tipo = (TIPOS[a.tipo] || TIPOS.otro).nombre;
+  const url = new URL(`./?alerta=${encodeURIComponent(a.id)}`, location.href).href;
+  const texto = `${tipo}: ${a.descripcion}${a.direccion ? ' · ' + a.direccion : ''}`;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: `${tipo} · AlertaVecinal`, text: texto, url });
+    } catch (error) {
+      if (error.name !== 'AbortError') aviso('No se pudo compartir la alerta.', 'error');
+    }
+    return;
+  }
+  // Respaldo (por ejemplo, Firefox en computadora): copiar al portapapeles.
+  try {
+    await navigator.clipboard.writeText(`${texto}\n${url}`);
+    aviso('Tu navegador no tiene «Compartir»: copiamos la alerta al portapapeles.', 'ok');
+  } catch {
+    aviso('No se pudo compartir ni copiar la alerta.', 'error');
+  }
 }
 
 /* ---------- Ubicación ---------- */
@@ -164,6 +293,7 @@ async function enviarAlerta(e) {
     uid: usuario.uid,
     nombre: perfil?.nombre || usuario.email
   };
+  if (foto) datos.foto = foto;
   const boton = $('btn-enviar-alerta');
   boton.disabled = true;
   try {
@@ -176,6 +306,7 @@ async function enviarAlerta(e) {
     }
     e.target.reset();
     ubicacion = null;
+    quitarFoto();
     $('alerta-ubicacion-texto').textContent = 'Sin ubicación todavía';
   } catch (error) {
     console.error(error);
@@ -206,6 +337,8 @@ function agregarEnlaceBoletin() {
 /* ---------- Arranque ---------- */
 agregarEnlaceBoletin();
 $('btn-ubicacion')?.addEventListener('click', obtenerUbicacion);
+$('alerta-foto')?.addEventListener('change', alElegirFoto);
+$('btn-quitar-foto')?.addEventListener('click', quitarFoto);
 $('form-alerta')?.addEventListener('submit', enviarAlerta);
 
 onSesion(({ perfil }) => {
