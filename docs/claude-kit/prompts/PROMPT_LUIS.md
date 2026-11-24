@@ -1,27 +1,64 @@
 # Prompt de Luis (integrante 2 · mapa, push y mapa de calor)
 
-**Requisitos:** tener Git, Node.js y Claude Code; haber aceptado la invitación como colaborador del repo `JazyelAe/alertavecinal`; y que Jaziel ya haya fusionado en `main` el kit (`CLAUDE.md` + `docs/claude-kit/`) y el núcleo de Apps Script (`apps-script/Comun.gs`).
-Clona el repo (`git clone https://github.com/JazyelAe/alertavecinal.git`), entra a la carpeta, abre Claude Code y pega lo que está entre las líneas:
+**Actualizado el 23/11/2026.** Tus commits de mapa, push y mapa de calor **ya están en `main`** (PR #4). Este prompt solo trae lo que te falta.
+
+## Antes de pegar el prompt
+
+1. Ten Git, Node.js y Claude Code instalados.
+2. Descarga el zip **más reciente** que te mandó Jaziel (`Integrante2_Luis_Xicali.zip`, con los PDF finales) en tu carpeta **Descargas** y descomprímelo en PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\AlertaVecinal" | Out-Null
+Expand-Archive "$HOME\Downloads\Integrante2_Luis_Xicali.zip" -DestinationPath "$HOME\AlertaVecinal\zip" -Force
+```
+
+3. Actualiza tu rama. Si ya tienes la carpeta `$HOME\AlertaVecinal\alertavecinal`:
+
+```powershell
+Set-Location "$HOME\AlertaVecinal\alertavecinal"
+git switch luis
+git pull origin main --no-edit
+```
+
+   Si no la tienes, clónala primero:
+
+```powershell
+Set-Location "$HOME\AlertaVecinal"
+git clone https://github.com/JazyelAe/alertavecinal.git
+Set-Location "$HOME\AlertaVecinal\alertavecinal"
+git switch luis
+git pull origin main --no-edit
+```
+
+4. En esa misma carpeta abre Claude Code (`claude`) y pega lo que está entre las líneas.
 
 ---
 
-Soy **Xicali Diaz Luis Alberto**, integrante 2 del equipo AlertaVecinal. Lee `CLAUDE.md` completo y todo `docs/claude-kit/specs/`. **Solo creas o modificas mis archivos** según `00-plan-y-reparto.md`: `js/mapa.js`, `js/push.js`, `sw-push.js`, `demo-push.html`, `js/heatmap.js`, `apps-script/Push.gs`, `apps-script/MapaCalor.gs`, `apps-script/vista_mapacalor.html`, mis secciones de `docs/producto2/` y mis PDF individuales. Si algo requiere tocar un archivo de otro, detente y dime a quién pedírselo.
+Soy **Xicali Diaz Luis Alberto** (GitHub `LuisAlbertoXicaliDiaz`, rama `luis`, matrícula 2311081407), integrante 2 del equipo AlertaVecinal. Lee `CLAUDE.md`, `docs/PROGRESO_UNIDAD2.md` y `docs/claude-kit/specs/` (00, 01, 02 y 03).
+
+**Solo creas o modificas mis archivos:** `js/mapa.js`, `js/push.js`, `sw-push.js`, `demo-push.html`, `js/heatmap.js`, `apps-script/Push.gs`, `apps-script/MapaCalor.gs`, `apps-script/vista_mapacalor.html`, `entregables/Subproducto6_Notificaciones.pdf`, `docs/producto2/luis.md`, mis specs en `docs/specs/` y mis PDF individuales. **No edites** `docs/PROGRESO_UNIDAD2.md`, `CLAUDE.md` ni archivos de otros: si algo lo requiere, detente y dime a quién pedírselo.
+
+Mis commits de mapa, push con FCM y mapa de calor **ya están en `main`** (PR #4): no los rehagas.
 
 **Paso 0 · Preparación** (repórtame y espera):
-1. Muéstrame `git config user.name` y `git config user.email`. Deben ser mi nombre y un correo de **mi** cuenta de GitHub; si no, ayúdame a configurarlos (solo en este repo si la compu es compartida). Pregúntame mi usuario de GitHub y mi matrícula, y anótalos en la tabla de `CLAUDE.md` en mi primer commit.
-2. Cámbiate a mi rama `luis` (o créala desde `main`) y actualízala con `main`.
-3. Revisa en el repo archivado `JazyelAe/alertavecinal-prueba` mis archivos de referencia (`js/mapa.js`, `js/push.js`, `sw-push.js`, `demo-push.html`, `js/heatmap.js`, `scripts/apps-script/Codigo.gs`) y dime qué hay que adaptar al repo nuevo.
+1. Muéstrame `git config user.name` y `git config user.email`. Deben ser mi nombre y un correo de mi cuenta `LuisAlbertoXicaliDiaz`.
+2. Confirma que estoy en la rama `luis`, que ya tiene lo último de `main` y que `git status` está limpio.
+3. Confirma que existe `$HOME\AlertaVecinal\zip\paso-13_documentacion-subproducto-6\entregables\Subproducto6_Notificaciones.pdf`.
 
 🛑 Espera mi "continúa".
 
-**Luego, uno por uno, con 🛑 Checkpoint A (spec) y 🛑 Checkpoint B (PR) en cada uno:**
-1. Commit `Mapa de alertas con Leaflet y Nominatim` (`js/mapa.js`).
-2. Commit `Notificaciones push con FCM y Apps Script`: `js/push.js`, `sw-push.js` (agrega `vibrate` a las notificaciones, según la spec 02), `demo-push.html` y `apps-script/Push.gs` con `accion_push(datos)`, migrando la lógica de `Codigo.gs` con el contrato que dejó Jaziel en `Comun.gs`.
-3. Commit `Aportación: Mapa de calor de incidentes` (`js/heatmap.js`).
-4. Commit `Vista de servidor: reporte de mapa de calor`: `apps-script/MapaCalor.gs` + `vista_mapacalor.html` (spec 01, RF-L2), y el enlace a la vista desde `js/heatmap.js`.
-5. Mi sección para el Producto 2 en `docs/producto2/luis.md`: mi aportación, la justificación de Leaflet, Nominatim y FCM, la configuración de FCM y VAPID, mis pruebas y mi conclusión firmada.
-6. Mis PDF individuales (SP6 primero, luego SP5 y SP7) con `docs/claude-kit/tools/utp_doc.py` y `alumno="Xicali Diaz Luis Alberto", matricula="<la mía>"`, siguiendo la spec 04. Solo cuando yo te lo diga.
+**Tareas, en este orden.** Cada una con 🛑 Checkpoint A (spec en `docs/specs/`) y 🛑 Checkpoint B (Pull Request de `luis` a `main`):
 
-Después de cada PR, avísale a Jaziel en el mensaje del PR qué se necesita desplegar (por ejemplo, "hay que hacer clasp push por Push.gs"). Lleva mi estado en `docs/PROGRESO_UNIDAD2.md`, en la sección de Luis.
+1. **Commit `Documentación Subproducto 6`:** copia ese PDF del zip a `entregables/Subproducto6_Notificaciones.pdf`. Ya es la versión final: **no lo regeneres**. Revisa que la portada tenga profesora, matrículas y la URL, sin corchetes.
+2. **Commit `Push desde el backend de Apps Script`:** crea `apps-script/Push.gs` con `accion_push(datos)`, migrando la lógica de `scripts/apps-script/Codigo.gs` al contrato que está al inicio de `apps-script/Comun.gs`, y agrega `vibrate` a las notificaciones de `sw-push.js` (spec 02). **No borres `scripts/apps-script/Codigo.gs`:** la app publicada lo sigue usando hasta que Jaziel despliegue el backend nuevo.
+3. **Commit `Vista de servidor: reporte de mapa de calor`:** `apps-script/MapaCalor.gs` + `apps-script/vista_mapacalor.html` (spec 01, RF-L2), y el enlace a la vista desde `js/heatmap.js`.
+4. **Commit `docs: sección de Luis para el Producto 2`:** `docs/producto2/luis.md` (spec 03): mi aportación, la justificación de Leaflet, Nominatim y FCM, la configuración de FCM y VAPID, mis pruebas y mi conclusión.
+5. **Mis PDF individuales** (SP6, SP5 y SP7, spec 04): **solo cuando Jaziel lo indique**.
+
+Para probar la app usa `npx --yes http-server -p 3000 -c-1` y abre `http://localhost:3000/?demo=1` en una ventana de incógnito nueva.
+
+En la descripción de cada Pull Request escribe qué hiciste, cómo lo probaste y si Jaziel debe hacer `clasp push` y una nueva implementación. No unas tú el Pull Request: avísale a Jaziel.
+
+**Fechas:** tareas 1 a 3 en Pull Request a más tardar el **martes 24 de noviembre**; tarea 4 el **jueves 26**. La entrega es el domingo 29.
 
 ---
