@@ -38,7 +38,7 @@ Si falta una matrícula o un usuario de GitHub, **pregúntaselo al integrante** 
 2. Auditar el estado actual del repo y de `alertavecinal-prueba` para esa parte.
 3. Escribir o actualizar `docs/specs/<tarea>.md`: objetivo, requisitos (RF-n), criterios de aceptación, archivos que se tocarán y su dueño.
 4. 🛑 **CHECKPOINT A**: mostrar resumen y plan. Esperar aprobación.
-5. Implementar → probar (`npx serve -l 3000`, Playwright o manual) → registrar resultados en la spec.
+5. Implementar → probar (`npx --yes http-server -p 3000 -c-1` y `http://localhost:3000/?demo=1` en incógnito, Playwright o manual) → registrar resultados en la spec. No uses `npx serve`: al quitar el `.html` de la URL pierde `?demo=1`.
 6. Commit(s) en su rama → PR a `main`.
 7. 🛑 **CHECKPOINT B**: dar el enlace al PR, qué probar y las capturas. **No seguir hasta que diga "continúa".**
 
