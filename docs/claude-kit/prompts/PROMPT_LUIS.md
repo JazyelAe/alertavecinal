@@ -1,6 +1,8 @@
 # Prompt de Luis (integrante 2 · mapa, push y mapa de calor)
 
-**Actualizado el 23/11/2026.** Tus commits de mapa, push y mapa de calor **ya están en `main`** (PR #4). Este prompt solo trae lo que te falta.
+**Actualizado el 23/11/2026, en la noche.** Tus commits de mapa, push y mapa de calor **ya están en `main`** (PR #4). Este prompt solo trae lo que te falta.
+
+> ⚠ **Antes de trabajar, haz `git pull origin main`** (paso 3 de abajo). Desde tu último commit entraron muchos cambios: el backend de Apps Script ya está publicado (`URL_BACKEND` en `js/firebase-config.js`, `sw.js` en v7), nuevas reglas y la ficha de Yeudiel. Tus archivos `Push.gs` y `MapaCalor.gs` se suman a ese backend.
 
 ## Antes de pegar el prompt
 
@@ -41,16 +43,17 @@ Soy **Xicali Diaz Luis Alberto** (GitHub `LuisAlbertoXicaliDiaz`, rama `luis`, m
 Mis commits de mapa, push con FCM y mapa de calor **ya están en `main`** (PR #4): no los rehagas.
 
 **Paso 0 · Preparación** (repórtame y espera):
-1. Muéstrame `git config user.name` y `git config user.email`. Deben ser mi nombre y un correo de mi cuenta `LuisAlbertoXicaliDiaz`.
-2. Confirma que estoy en la rama `luis`, que ya tiene lo último de `main` y que `git status` está limpio.
-3. Confirma que existe `$HOME\AlertaVecinal\zip\paso-13_documentacion-subproducto-6\entregables\Subproducto6_Notificaciones.pdf`.
+1. Lee la sección "⚠ Avisos vigentes" de `CLAUDE.md` y dímela.
+2. Muéstrame `git config user.name` y `git config user.email`. Deben ser mi nombre y un correo de mi cuenta `LuisAlbertoXicaliDiaz`.
+3. Ejecuta `git switch luis`, `git fetch origin` y `git log --oneline HEAD..origin/main`. Si aparece algún commit, ejecuta `git pull origin main --no-edit` y muéstrame el resultado. Si hay conflicto, detente. Confirma que `git status` está limpio.
+4. Confirma que existe `$HOME\AlertaVecinal\zip\paso-13_documentacion-subproducto-6\entregables\Subproducto6_Notificaciones.pdf`.
 
 🛑 Espera mi "continúa".
 
 **Tareas, en este orden.** Cada una con 🛑 Checkpoint A (spec en `docs/specs/`) y 🛑 Checkpoint B (Pull Request de `luis` a `main`):
 
 1. **Commit `Documentación Subproducto 6`:** copia ese PDF del zip a `entregables/Subproducto6_Notificaciones.pdf`. Ya es la versión final: **no lo regeneres**. Revisa que la portada tenga profesora, matrículas y la URL, sin corchetes.
-2. **Commit `Push desde el backend de Apps Script`:** crea `apps-script/Push.gs` con `accion_push(datos)`, migrando la lógica de `scripts/apps-script/Codigo.gs` al contrato que está al inicio de `apps-script/Comun.gs`, y agrega `vibrate` a las notificaciones de `sw-push.js` (spec 02). **No borres `scripts/apps-script/Codigo.gs`:** la app publicada lo sigue usando hasta que Jaziel despliegue el backend nuevo.
+2. **Commit `Push desde el backend de Apps Script`:** crea `apps-script/Push.gs` con `accion_push(datos)`, migrando la lógica de `scripts/apps-script/Codigo.gs` al contrato que está al inicio de `apps-script/Comun.gs`, y agrega `vibrate` a las notificaciones de `sw-push.js` (spec 02). **No borres `scripts/apps-script/Codigo.gs` ni cambies `PUSH_ENDPOINT`:** la app publicada lo sigue usando hasta que Jaziel publique `Push.gs` y lo pruebe.
 3. **Commit `Vista de servidor: reporte de mapa de calor`:** `apps-script/MapaCalor.gs` + `apps-script/vista_mapacalor.html` (spec 01, RF-L2), y el enlace a la vista desde `js/heatmap.js`.
 4. **Commit `docs: sección de Luis para el Producto 2`:** `docs/producto2/luis.md` (spec 03): mi aportación, la justificación de Leaflet, Nominatim y FCM, la configuración de FCM y VAPID, mis pruebas y mi conclusión.
 5. **Mis PDF individuales** (SP6, SP5 y SP7, spec 04): **solo cuando Jaziel lo indique**.
@@ -59,6 +62,8 @@ Para probar la app usa `npx --yes http-server -p 3000 -c-1` y abre `http://local
 
 En la descripción de cada Pull Request escribe qué hiciste, cómo lo probaste y si Jaziel debe hacer `clasp push` y una nueva implementación. No unas tú el Pull Request: avísale a Jaziel.
 
-**Fechas:** tareas 1 a 3 en Pull Request a más tardar el **martes 24 de noviembre**; tarea 4 el **jueves 26**. La entrega es el domingo 29.
+En las plantillas `.html` de `apps-script/` (como `vista_mapacalor.html`), nunca escribas etiquetas `<?`, `<?=` ni `<?!=` dentro de un comentario: Apps Script también las ejecuta ahí y la vista falla con *Unexpected token ';'*. Toma `vista_boletin.html` como ejemplo.
+
+**Fechas:** tareas 1 a 3 en Pull Request a más tardar el **martes 24 de noviembre**. Tarea 4 el **jueves 26**. La entrega es el domingo 29.
 
 ---
