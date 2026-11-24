@@ -1,0 +1,93 @@
+<!doctype html>
+<!-- Diagrama de arquitectura de AlertaVecinal. Se convierte a arquitectura.png con la captura de pruebas_jaziel.js. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; font-family: "Segoe UI", Roboto, sans-serif; background: #fff; }
+  svg text { font-size: 13px; fill: #1f2933; }
+  .t { font-weight: 700; font-size: 14px; }
+  .s { font-size: 11.5px; fill: #5f6b7a; }
+</style>
+</head>
+<body>
+<svg width="980" height="545" viewBox="0 0 980 545" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5f6b7a"/>
+    </marker>
+  </defs>
+
+  <!-- Dispositivo del vecino -->
+  <rect x="20" y="20" width="300" height="480" rx="14" fill="#f1f4f8" stroke="#1d3557" stroke-width="2"/>
+  <text x="40" y="50" class="t">Teléfono o computadora del vecino</text>
+  <rect x="40" y="70" width="260" height="120" rx="10" fill="#fff" stroke="#d9e0e8"/>
+  <text x="56" y="96" class="t">PWA AlertaVecinal</text>
+  <text x="56" y="118">HTML, CSS y JavaScript (vistas cliente)</text>
+  <text x="56" y="138" class="s">Alertas, mapa, mapa de calor, Panel Pro,</text>
+  <text x="56" y="156" class="s">administración, cámara, vibración, compartir</text>
+  <text x="56" y="176" class="s">y GPS (geolocalización)</text>
+  <rect x="40" y="205" width="260" height="120" rx="10" fill="#fff" stroke="#d9e0e8"/>
+  <text x="56" y="231" class="t">Service worker (sw.js)</text>
+  <text x="56" y="253">Cache Storage: app shell y mapas</text>
+  <text x="56" y="273" class="s">offline.html · Background Sync (sw-sync.js)</text>
+  <text x="56" y="291" class="s">Notificaciones push (sw-push.js)</text>
+  <rect x="40" y="340" width="260" height="140" rx="10" fill="#fff" stroke="#d9e0e8"/>
+  <text x="56" y="366" class="t">Datos locales</text>
+  <text x="56" y="388">IndexedDB: cola de "Alerta sin señal"</text>
+  <text x="56" y="408" class="s">Caché persistente de Firestore</text>
+  <text x="56" y="426" class="s">(alertas ya vistas en modo avión)</text>
+  <text x="56" y="446" class="s">localStorage: preferencias</text>
+
+  <!-- GitHub Pages -->
+  <rect x="380" y="20" width="250" height="80" rx="12" fill="#fff" stroke="#457b9d" stroke-width="2"/>
+  <text x="398" y="50" class="t">GitHub Pages (HTTPS)</text>
+  <text x="398" y="72" class="s">Publica los archivos de la PWA</text>
+  <text x="398" y="88" class="s">desde la rama main</text>
+
+  <!-- Firebase -->
+  <rect x="380" y="140" width="250" height="170" rx="12" fill="#fff" stroke="#e63946" stroke-width="2"/>
+  <text x="398" y="168" class="t">Firebase (plan Spark)</text>
+  <text x="398" y="192">Authentication: correo y contraseña</text>
+  <text x="398" y="214">Firestore: usuarios, alertas, avisos,</text>
+  <text x="398" y="232">tokens (en tiempo real)</text>
+  <text x="398" y="256">Cloud Messaging (FCM): push</text>
+  <text x="398" y="278" class="s">Seguridad: firestore.rules</text>
+
+  <!-- Apps Script -->
+  <rect x="380" y="350" width="250" height="150" rx="12" fill="#fff" stroke="#2a9d8f" stroke-width="2"/>
+  <text x="398" y="378" class="t">Google Apps Script (servidor)</text>
+  <text x="398" y="402">Vistas generadas en el servidor:</text>
+  <text x="398" y="420" class="s">boletín, ficha de Vecino Verificado</text>
+  <text x="398" y="442">Acciones con cuenta de servicio:</text>
+  <text x="398" y="460" class="s">alerta sin señal, verificar, push</text>
+  <text x="398" y="482" class="s">(sustituye a Cloud Functions)</text>
+
+  <!-- Servicios de mapas -->
+  <rect x="700" y="140" width="260" height="110" rx="12" fill="#fff" stroke="#f08c00" stroke-width="2"/>
+  <text x="718" y="168" class="t">OpenStreetMap + Leaflet</text>
+  <text x="718" y="190" class="s">Mosaicos del mapa (caché aparte)</text>
+  <text x="718" y="216" class="t">Nominatim</text>
+  <text x="718" y="236" class="s">Coordenadas → dirección</text>
+
+  <rect x="700" y="350" width="260" height="110" rx="12" fill="#fff" stroke="#6c757d" stroke-width="2"/>
+  <text x="718" y="378" class="t">Navegador / sistema</text>
+  <text x="718" y="400" class="s">Servicio de push del navegador</text>
+  <text x="718" y="418" class="s">(entrega la notificación aunque</text>
+  <text x="718" y="436" class="s">la app esté cerrada)</text>
+
+  <!-- Flechas -->
+  <line x1="320" y1="90" x2="378" y2="62" stroke="#5f6b7a" stroke-width="1.6" marker-end="url(#f)" marker-start="url(#f)"/>
+  <line x1="320" y1="150" x2="378" y2="210" stroke="#5f6b7a" stroke-width="1.6" marker-end="url(#f)" marker-start="url(#f)"/>
+  <line x1="320" y1="260" x2="378" y2="410" stroke="#5f6b7a" stroke-width="1.6" marker-end="url(#f)" marker-start="url(#f)"/>
+  <line x1="505" y1="350" x2="505" y2="312" stroke="#5f6b7a" stroke-width="1.6" marker-end="url(#f)" marker-start="url(#f)"/>
+  <text x="512" y="336" class="s">REST + cuenta de servicio</text>
+  <line x1="630" y1="255" x2="698" y2="390" stroke="#5f6b7a" stroke-width="1.6" marker-end="url(#f)"/>
+  <text x="640" y="345" class="s">FCM</text>
+  <path d="M830,462 V535 H170 V503" fill="none" stroke="#5f6b7a" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#f)"/>
+  <text x="430" y="528" class="s">La notificación llega al service worker (sw-push.js)</text>
+  <path d="M320,118 H665 V195 H698" fill="none" stroke="#5f6b7a" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#f)"/>
+  <text x="440" y="114" class="s">Mapa y direcciones</text>
+</svg>
+</body>
+</html>

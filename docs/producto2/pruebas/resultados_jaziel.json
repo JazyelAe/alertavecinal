@@ -1,0 +1,86 @@
+{
+  "fecha": "2026-11-24T05:31:40.072Z",
+  "app": "https://jazyelae.github.io/alertavecinal/",
+  "resultados": [
+    {
+      "id": "J-01",
+      "paso": true,
+      "detalle": "Sin sesión se muestra la pantalla de acceso (registro e inicio de sesión)"
+    },
+    {
+      "id": "J-02",
+      "paso": true,
+      "detalle": "Con ?demo=1 abre el panel con 5 módulos (enviar, lista, push, mapa, calor) y sin errores de JavaScript"
+    },
+    {
+      "id": "J-03",
+      "paso": true,
+      "detalle": "Se sirve por HTTPS; manifest con display \"standalone\", start_url \"./?origen=pwa\" e iconos 192x192/any, 512x512/any, 512x512/maskable"
+    },
+    {
+      "id": "J-04",
+      "paso": true,
+      "detalle": "Service worker activated con alcance https://jazyelae.github.io/alertavecinal/; cachés: alertavecinal-v7, alertavecinal-mapas (33 archivos en alertavecinal-v7)"
+    },
+    {
+      "id": "J-05",
+      "paso": true,
+      "detalle": "Los botones caches.keys(), cache.keys(), cache.match(), cache.add(), cache.put() y caches.has() responden sin error"
+    },
+    {
+      "id": "J-06",
+      "paso": true,
+      "detalle": "En modo avión la app vuelve a abrir desde la caché (app shell)"
+    },
+    {
+      "id": "J-07",
+      "paso": true,
+      "detalle": "En modo avión, una página no guardada muestra offline.html (\"Estás sin conexión\")"
+    },
+    {
+      "id": "J-08",
+      "paso": true,
+      "detalle": "GPS: \"Obtener mi ubicación\" llena la ubicación (19.04140, -98.20630)"
+    },
+    {
+      "id": "J-09",
+      "paso": true,
+      "detalle": "Sin conexión, la alerta queda guardada en IndexedDB con el aviso \"esperando señal\""
+    },
+    {
+      "id": "J-10",
+      "paso": true,
+      "detalle": "Al volver la señal la alerta se envía sola y aparece en la lista (46 → 47 alertas)"
+    },
+    {
+      "id": "J-11",
+      "paso": true,
+      "detalle": "\"Agregar foto\" comprime la imagen en el navegador y muestra la vista previa (Foto lista: 11 KB)"
+    },
+    {
+      "id": "J-12",
+      "paso": true,
+      "detalle": "\"Compartir\" usa navigator.share o, si no existe, copia el texto con el enlace (Robo: PRUEBA sin señal: sujeto intentando abrir autos · Calle 7 Sur, Puebla de Z…)"
+    },
+    {
+      "id": "J-13",
+      "paso": true,
+      "detalle": "En un celular de 375 px no hay desplazamiento horizontal (ancho del documento: 375 px)"
+    },
+    {
+      "id": "J-14",
+      "paso": true,
+      "detalle": "El backend responde: configurado=true, vistas boletin, verificado, acciones alerta_sin_senal, verificar"
+    },
+    {
+      "id": "J-15",
+      "paso": true,
+      "detalle": "El boletín se genera en el servidor de Apps Script y trae el pie \"Generado en el servidor el …\""
+    },
+    {
+      "id": "J-16",
+      "paso": true,
+      "detalle": "El boletín público no muestra correos, nombres ni números de casa"
+    }
+  ]
+}
