@@ -7,7 +7,7 @@
 import {
   collection, doc, onSnapshot, updateDoc, deleteDoc, addDoc, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-import { db, esDemo, datosDemo, onSesion, aviso, agregarMenu } from './auth.js';
+import { db, auth, esDemo, datosDemo, onSesion, aviso, agregarMenu } from './auth.js';
 
 const $ = (id) => document.getElementById(id);
 const enPaginaAdmin = Boolean($('tabla-usuarios'));
@@ -56,6 +56,35 @@ async function eliminar(u) {
   }
 }
 
+/* ---------- Vecino Verificado: domicilio verificado por el comité ---------- */
+// La verificación pasa por el backend de Apps Script (accion_verificar), que
+// comprueba en el servidor que quien llama es admin y sella la hora del servidor.
+// Sin URL_BACKEND no se ofrece; en ?demo=1 se simula en la tabla.
+const puedeVerificar = () => esDemo || Boolean(self.URL_BACKEND);
+const urlFicha = (uid) => `${self.URL_BACKEND}?vista=verificado&uid=${encodeURIComponent(uid)}`;
+
+async function verificar(u, valor) {
+  const mensaje = valor ? `Domicilio de ${u.nombre} verificado.` : `Se quitó la verificación de ${u.nombre}.`;
+  if (esDemo) {
+    usuarios = usuarios.map((x) => (x.id === u.id ? { ...x, verificado: valor } : x));
+    pintar();
+    return aviso(mensaje, 'ok');
+  }
+  try {
+    const respuesta = await fetch(self.URL_BACKEND, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // sin verificación CORS previa
+      body: JSON.stringify({ accion: 'verificar', idToken: await auth.currentUser.getIdToken(), uid: u.id, verificado: valor })
+    });
+    const r = await respuesta.json();
+    if (!r.ok) throw new Error(r.error || 'Error del servidor');
+    aviso(mensaje, 'ok');   // la tabla se actualiza sola con onSnapshot
+  } catch (error) {
+    console.error(error);
+    aviso(`No se pudo cambiar la verificación: ${error.message}`, 'error');
+  }
+}
+
 function boton(texto, clase, accion) {
   const b = document.createElement('button');
   b.type = 'button';
@@ -89,12 +118,26 @@ function pintar() {
     rol.innerHTML = `<span class="chip">${u.rol === 'admin' ? 'Admin' : 'Vecino'}</span>`;
     const estado = document.createElement('td');
     estado.innerHTML = ETIQUETA_ESTADO[u.estado] || u.estado;
+    if (u.estado === 'aprobado' && u.verificado) estado.insertAdjacentHTML('beforeend', ' <span class="chip chip-ok">Domicilio verificado</span>');
 
     const acciones = document.createElement('td');
     const caja = document.createElement('div');
     caja.className = 'acciones';
     const soyYo = u.id === miUid;
     if (u.estado !== 'aprobado') caja.appendChild(boton('Aprobar', 'btn-verde', () => cambiar(u.id, { estado: 'aprobado' }, `${u.nombre} fue aprobado.`)));
+    if (u.estado === 'aprobado' && puedeVerificar()) {
+      caja.appendChild(boton(u.verificado ? 'Quitar verificación' : 'Verificar domicilio', u.verificado ? 'btn-claro' : 'btn-verde',
+        () => verificar(u, !u.verificado)));
+    }
+    if (u.estado === 'aprobado' && self.URL_BACKEND && !esDemo) {
+      const ficha = document.createElement('a');
+      ficha.className = 'btn btn-chico btn-claro';
+      ficha.href = urlFicha(u.id);
+      ficha.target = '_blank';
+      ficha.rel = 'noopener';
+      ficha.textContent = 'Ficha';
+      caja.appendChild(ficha);
+    }
     if (u.estado === 'aprobado' && !soyYo) caja.appendChild(boton('Suspender', 'btn-claro', () => cambiar(u.id, { estado: 'suspendido' }, `${u.nombre} fue suspendido.`)));
     if (!soyYo) {
       const nuevoRol = u.rol === 'admin' ? 'vecino' : 'admin';
@@ -102,7 +145,7 @@ function pintar() {
         () => cambiar(u.id, { rol: nuevoRol }, `Rol de ${u.nombre}: ${nuevoRol}.`)));
       caja.appendChild(boton('Eliminar', 'btn-peligro', () => eliminar(u)));
     } else {
-      caja.innerHTML = '<span class="nota">(tú)</span>';
+      caja.insertAdjacentHTML('beforeend', '<span class="nota">(tú)</span>');
     }
     acciones.appendChild(caja);
     tr.append(nombre, domicilio, rol, estado, acciones);

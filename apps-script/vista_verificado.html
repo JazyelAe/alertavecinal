@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- Plantilla de Apps Script: <?= ?> escribe un valor (escapado) y <? ?> ejecuta código EN EL SERVIDOR. -->
+  <?!= estilosComunes_() ?>
+  <style>
+    .ficha{max-width:520px;margin:0 auto;text-align:center}
+    .avatar{width:84px;height:84px;border-radius:50%;background:var(--azul);color:#fff;font-size:2.2rem;font-weight:800;
+            display:flex;align-items:center;justify-content:center;margin:4px auto 10px}
+    .sello{display:inline-block;border-radius:999px;padding:4px 12px;font-weight:700;font-size:.85rem;margin:3px}
+    .sello.aprobado{background:#e6f4f1;color:var(--verde)}
+    .sello.domicilio{background:#e8f0fb;color:var(--medica)}
+    .sello.pendiente{background:#f1f4f8;color:var(--texto-suave)}
+    .cifras{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .cifra{font-size:1.8rem;font-weight:800;color:var(--azul)}
+    .nota{color:var(--texto-suave);font-size:.9rem}
+    .insignia{display:inline-block;border-radius:999px;padding:6px 16px;font-weight:800;margin-top:6px}
+    .insignia.guardian{background:linear-gradient(135deg,#f4a261,#e76f51);color:#fff}
+    .insignia.confiable{background:#e6f4f1;color:var(--verde)}
+    .insignia.colaborador{background:#fff4e0;color:var(--gas)}
+    .insignia.nuevo{background:#f1f4f8;color:var(--texto-suave)}
+  </style>
+</head>
+<body>
+  <header><span class="logo">AV</span><b>AlertaVecinal</b> · Vecino Verificado</header>
+  <main>
+    <? if (!datos.encontrado) { ?>
+      <div class="tarjeta ficha">
+        <h1>Ficha no disponible</h1>
+        <p class="nota">Este enlace no corresponde a un vecino aprobado de AlertaVecinal.
+          Si crees que es un error, pide al vecino que comparta su ficha desde la aplicación.</p>
+      </div>
+    <? } else { ?>
+      <div class="tarjeta ficha">
+        <div class="avatar" aria-hidden="true"><?= datos.nombreCorto.charAt(0) ?></div>
+        <h1><?= datos.nombreCorto ?></h1>
+        <div>
+          <span class="sello aprobado">✔ Vecino aprobado<?= datos.esAdmin ? ' · administrador' : '' ?></span>
+          <? if (datos.domicilioVerificado) { ?>
+            <span class="sello domicilio">🏠 Domicilio verificado por el comité</span>
+          <? } else { ?>
+            <span class="sello pendiente">Domicilio sin verificar</span>
+          <? } ?>
+        </div>
+        <? if (datos.domicilioVerificado && datos.verificadoEn) { ?>
+          <p class="nota">Verificado el <?= datos.verificadoEn ?>.</p>
+        <? } ?>
+        <p class="nota">Miembro de la red desde <?= datos.miembroDesde ?> (<?= datos.dias ?> días).</p>
+
+        <div class="cifras">
+          <div class="tarjeta"><div class="cifra"><?= datos.total ?></div>alertas enviadas</div>
+          <div class="tarjeta"><div class="cifra"><?= datos.utiles ?></div>alertas útiles</div>
+          <div class="tarjeta"><div class="cifra"><?= datos.porcentajeUtil ?>%</div>de utilidad</div>
+        </div>
+
+        <h2 style="margin-top:8px">Insignia</h2>
+        <span class="insignia <?= datos.claseInsignia ?>"><?= datos.insignia ?></span>
+        <p class="nota">Una alerta es útil si trae ubicación GPS y una descripción clara, o una foto de evidencia.
+          La insignia sube con las alertas útiles y la antigüedad en la red.</p>
+      </div>
+      <p class="nota" style="text-align:center">Por privacidad, esta ficha no muestra correo, teléfono, domicilio ni las alertas del vecino.</p>
+    <? } ?>
+    <p style="text-align:center"><a href="https://jazyelae.github.io/alertavecinal/">Abrir la aplicación AlertaVecinal</a></p>
+  </main>
+  <footer class="ssr">Generado en el servidor (Google Apps Script) el <?= datos.generadoEn ?>.</footer>
+</body>
+</html>

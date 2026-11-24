@@ -142,6 +142,11 @@ function pintarMiFicha(todas) {
   $('ficha-antiguedad-nota').textContent = desdeAlta ? 'desde tu registro' : primera ? 'desde tu primera alerta' : '';
   $('ficha-insignia').innerHTML = chipInsignia(insignia);
   $('ficha-siguiente').textContent = siguienteInsignia(utiles, dias);
+
+  // Ficha pública generada en el servidor (apps-script/Verificado.gs). Requiere conexión.
+  const conBackend = Boolean(self.URL_BACKEND) && !esDemo;
+  $('ficha-enlace').hidden = !conBackend;
+  if (conBackend) $('ficha-publica').href = `${self.URL_BACKEND}?vista=verificado&uid=${encodeURIComponent(usuario.uid)}`;
 }
 
 /* ---------- Indicadores de la colonia ---------- */
