@@ -1,6 +1,8 @@
 # Prompt de Yeudiel (integrante 3 · administración, instalación y Vecino Verificado Pro)
 
-**Actualizado el 23/11/2026.** Tus commits del panel de administración y del botón de instalar **ya están en `main`** (PR #3). Este prompt solo trae lo que te falta.
+**Actualizado el 23/11/2026, en la noche.** Ya están en `main`: panel de administración y botón de instalar (PR #3), Vecino Verificado Pro (PR #11), y la ficha de servidor con tu sección del Producto 2 (PR #12). Este prompt solo trae lo que te falta.
+
+> ⚠ **Antes de trabajar, haz `git pull origin main`** (paso 3 de abajo). Jaziel corrigió la línea 5 de tu `apps-script/vista_verificado.html` (PR #17): el comentario traía etiquetas `<?= ?>` y Apps Script las ejecutaba, así que la ficha fallaba en Google. Con la corrección ya funciona en línea; no la reviertas.
 
 ## Antes de pegar el prompt
 
@@ -38,28 +40,28 @@ Soy **Gonzalez Barrios Yeudiel Nain** (GitHub `yeudev-utp`, rama `yeudiel`, matr
 
 **Solo creas o modificas mis archivos:** `admin.html`, `js/admin.js`, `js/instalar.js`, `estadisticas.html`, `js/estadisticas.js`, `apps-script/Verificado.gs`, `apps-script/vista_verificado.html`, `README.md`, `entregables/Subproducto5_Aportacion.pdf`, `entregables/GUIA_REPOSITORIO.md`, `entregables/GUIA_REPOSITORIO.pdf`, `docs/producto2/yeudiel.md`, mis specs en `docs/specs/` y mis PDF individuales. **No edites** `docs/PROGRESO_UNIDAD2.md`, `CLAUDE.md` ni archivos de otros: si algo lo requiere, detente y dime a quién pedírselo.
 
-Mis commits del panel de administración y del botón de instalar **ya están en `main`** (PR #3): no los rehagas.
+Ya están en `main` y **no se rehacen**: panel de administración y botón de instalar (PR #3), `Aportación: Vecino Verificado Pro` (PR #11), `Vista de servidor: ficha de Vecino Verificado` y `docs: sección de Yeudiel para el Producto 2` (PR #12).
 
 **Paso 0 · Preparación** (repórtame y espera):
-1. Muéstrame `git config user.name` y `git config user.email`. Deben ser mi nombre y un correo de mi cuenta `yeudev-utp`.
-2. Confirma que estoy en la rama `yeudiel`, que ya tiene lo último de `main` y que `git status` está limpio.
-3. Confirma que en `$HOME\AlertaVecinal\zip` existen `paso-10_vecino-verificado-pro` y `paso-14_documentacion-subproducto-5-readme`.
+1. Lee la sección "⚠ Avisos vigentes" de `CLAUDE.md` y dímela.
+2. Muéstrame `git config user.name` y `git config user.email`. Deben ser mi nombre y un correo de mi cuenta `yeudev-utp`.
+3. Ejecuta `git switch yeudiel`, `git fetch origin` y `git log --oneline HEAD..origin/main`. Si aparece algún commit, ejecuta `git pull origin main --no-edit` y muéstrame el resultado. Debe traer, entre otros, el cambio de la línea 5 de `apps-script/vista_verificado.html` (PR #17). Si hay conflicto, detente.
+4. Confirma que `git status` está limpio y que en `$HOME\AlertaVecinal\zip` existe `paso-14_documentacion-subproducto-5-readme`.
 
 🛑 Espera mi "continúa".
 
-**Tareas, en este orden.** Cada una con 🛑 Checkpoint A (spec en `docs/specs/`) y 🛑 Checkpoint B (Pull Request de `yeudiel` a `main`):
+**Lo que falta, en este orden.** Cada tarea con 🛑 Checkpoint A (spec en `docs/specs/`) y 🛑 Checkpoint B (Pull Request de `yeudiel` a `main`):
 
-1. **Commit `Aportación: Vecino Verificado Pro`:** `estadisticas.html` + `js/estadisticas.js`. Parte de los archivos de `$HOME\AlertaVecinal\zip\paso-10_vecino-verificado-pro` y haz que use **datos reales** de Firestore (alertas por vecino, alertas útiles, antigüedad e insignia), no de maqueta. Hoy es lo único que le falta a la app: en el menú aún no aparece **Panel Pro**.
-2. **Commit `Documentación Subproducto 5 y guía del repositorio`:** copia del zip, desde `paso-14_documentacion-subproducto-5-readme\entregables`, los archivos `Subproducto5_Aportacion.pdf`, `GUIA_REPOSITORIO.md` y `GUIA_REPOSITORIO.pdf` a `entregables/`. Ya son finales: **no los regeneres**. El `README.md` de ese paso **todavía no** (va en la tarea 5).
-3. **Commit `Vista de servidor: ficha de Vecino Verificado`:** `apps-script/Verificado.gs` + `apps-script/vista_verificado.html` (spec 01, RF-Y1, y RF-Y2 opcional), y el enlace desde mi módulo.
-4. **Commit `docs: sección de Yeudiel para el Producto 2`:** `docs/producto2/yeudiel.md` (spec 03): mi aportación, el panel de administración y la instalación, mis pruebas y mi conclusión.
-5. **Commit `Documentación del README`:** `README.md` completo según la spec 03, con la tabla de cumplimiento del Producto 2 y los créditos de los 3 integrantes. Puedes partir del `README.md` del zip (paso 14). Se hace al final, cuando Jaziel confirme la URL publicada y las capturas.
-6. **Mis PDF individuales** (SP5, SP7, SP6 y SP4, spec 04): **solo cuando Jaziel lo indique**.
+1. **Commit `Documentación Subproducto 5 y guía del repositorio`** (vence el martes 24): copia del zip, desde `paso-14_documentacion-subproducto-5-readme\entregables`, los archivos `Subproducto5_Aportacion.pdf`, `GUIA_REPOSITORIO.md` y `GUIA_REPOSITORIO.pdf` a `entregables/`. Ya son finales: **no los regeneres**. El `README.md` de ese paso **todavía no** (va en la tarea 2).
+2. **Commit `Documentación del README`:** `README.md` completo según la spec 03, con la tabla de cumplimiento del Producto 2 y los créditos de los 3 integrantes. Puedes partir del `README.md` del zip (paso 14). Se hace al final, cuando Jaziel confirme la URL publicada y las capturas.
+3. **Mis PDF individuales** (SP5, SP7, SP6 y SP4, spec 04): **solo cuando Jaziel lo indique**.
 
 Para probar la app usa `npx --yes http-server -p 3000 -c-1` y abre `http://localhost:3000/?demo=1` en una ventana de incógnito nueva.
 
 En la descripción de cada Pull Request escribe qué hiciste, cómo lo probaste y si Jaziel debe hacer `clasp push` y una nueva implementación. No unas tú el Pull Request: avísale a Jaziel.
 
-**Fechas:** tareas 1 a 3 en Pull Request a más tardar el **martes 24 de noviembre**; tarea 4 el **jueves 26**; tarea 5 el **viernes 27**. La entrega es el domingo 29.
+En las plantillas `.html` de `apps-script/`, nunca escribas etiquetas `<?`, `<?=` ni `<?!=` dentro de un comentario: Apps Script también las ejecuta ahí.
+
+**Fechas:** tarea 1 a más tardar el **martes 24 de noviembre**. Tarea 2 el **viernes 27**. La entrega es el domingo 29.
 
 ---

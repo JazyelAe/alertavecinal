@@ -3,17 +3,21 @@
 Leyenda: ⬜ pendiente · 🟨 en curso · 🛑 esperando revisión · ✅ terminado (fusionado en `main`)
 Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 
-## Estado del repositorio (auditoría del 24/11/2026)
-- `main` tiene 12 PR fusionados: #1, #2, #5 a #10 (Jaziel), #3, #11 y #12 (Yeudiel) y #4 (Luis). No hay PR abiertos.
+## Estado del repositorio (auditoría del 23/11/2026, noche)
+- `main` tiene 17 PR fusionados: #1, #2, #5 a #10 y #13 a #17 (Jaziel), #3, #11 y #12 (Yeudiel) y #4 (Luis). No hay PR abiertos.
 - Yeudiel subió el 23/11 Vecino Verificado Pro, la ficha de servidor y su sección del Producto 2 (PR #11 y #12).
 - Luis no ha subido nada desde el 21/11.
-- La app abre sin errores en GitHub Pages con `?demo=1`, ya con **Panel Pro**: https://jazyelae.github.io/alertavecinal/. Ningún recurso da 404.
+- La app abre sin errores en GitHub Pages, con **Panel Pro** y **Boletín** en el menú: https://jazyelae.github.io/alertavecinal/. Ningún recurso da 404.
 - `entregables/Subproducto4_API_Cache.pdf` ya es la versión final (PR #9). Los PDF finales del Subproducto 5, el Subproducto 6 y la guía están en los zips más recientes de Luis y Yeudiel.
-- El push publicado sigue en `scripts/apps-script/Codigo.gs` (`PUSH_ENDPOINT`). El backend nuevo (`apps-script/`: `Comun.gs`, `Boletin.gs`, `SinSenal.gs` y `Verificado.gs`) **aún no está desplegado**: `URL_BACKEND` está vacío en `js/firebase-config.js`, así que el boletín, la ficha pública y la verificación de domicilio no aparecen en la app publicada.
+- **Backend publicado** (proyecto *AlertaVecinal Backend*, implementación *Backend v3*): https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec. Responde `configurado: true`; funcionan en línea la vista `boletin`, la vista `verificado` y las acciones `alerta_sin_senal` y `verificar`. `URL_BACKEND` ya está en la app y `sw.js` subió a v7 (PR #15).
+- **Error corregido (PR #16 y #17):** las dos plantillas tenían etiquetas `<?= ?>` dentro de un comentario y fallaban en Google con *Unexpected token ';'*. Se corrigió la línea 5 de `vista_boletin.html` y la de `vista_verificado.html` (de Yeudiel). **Luis y Yeudiel deben hacer `git pull origin main` antes de seguir.**
+- El push publicado sigue en `scripts/apps-script/Codigo.gs` (`PUSH_ENDPOINT`) hasta que Luis suba `Push.gs`.
+- `firestore.rules` publicadas el 23/11, con foto de la cámara y verificación protegida (PR #14).
 - No hay secretos en el historial (ninguna `BEGIN PRIVATE KEY`).
-- `clasp` 3.4.1 ya está instalado en la PC de Jaziel.
 
 ## ▶ Lo que falta, por persona (léelo primero)
+
+> ⚠ **Luis y Yeudiel: antes de cualquier cosa, `git switch <tu rama>` y `git pull origin main --no-edit`.** Tu Claude lo hace en el paso 0 de tu prompt.
 
 **Cómo trabajar:** sigue tu prompt de `docs/claude-kit/prompts/`; ahí están los comandos para actualizar tu rama y el texto que pegas en Claude Code. Cada tarea es un commit en tu rama y un Pull Request a `main`. **Este archivo lo actualiza solo Jaziel**, para evitar conflictos.
 
@@ -42,10 +46,10 @@ Ya está en `main`: panel de administración y botón de instalar (PR #3), Vecin
 
 ### Jaziel
 - Unir los Pull Request de Luis y Yeudiel (*Merge pull request* > *Create a merge commit*).
-- Publicar `firestore.rules` y probar la cámara en el teléfono (pendiente del PR #8).
-- Primer despliegue del backend con clasp (`Comun`, `Boletin`, `SinSenal` y `Verificado` ya están) y poner `URL_BACKEND`. Cuando Luis suba `Push.gs` y `MapaCalor.gs`, se publica una versión nueva en la misma implementación.
-- Escribir `docs/producto2/jaziel.md` y el script del PDF del Producto 2.
-- Pruebas con la base real y documento final del Producto 2.
+- ✅ Publicar `firestore.rules` (23/11). ⬜ Probar la cámara en el teléfono.
+- ✅ Primer despliegue del backend y `URL_BACKEND` (23/11). ⬜ Cuando Luis suba `Push.gs` y `MapaCalor.gs`: `clasp push` y `clasp deploy -i` con la misma implementación.
+- ⬜ Escribir `docs/producto2/jaziel.md` y el script del PDF del Producto 2.
+- ⬜ Pruebas con la base real y documento final del Producto 2.
 
 En cada PR, Luis y Yeudiel avisan si Jaziel debe hacer `clasp push` y una nueva implementación.
 
@@ -59,7 +63,7 @@ En cada PR, Luis y Yeudiel avisan si Jaziel debe hacer `clasp push` y una nueva 
 | 4 | Backend de la aportación Alerta sin señal | ✅ | PR #7. Prueba local 9/9 (incluye la foto) |
 | 5 | Dispositivo: cámara, vibración y compartir en alertas | ✅ | PR #8 (Pages en v6). Falta: Jaziel publica `firestore.rules` y prueba en su teléfono |
 | 6 | Datos offline: persistencia de Firestore | ✅ | PR #8. Caché `persistent` verificada |
-| — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | ⬜ | Se puede hacer ya con lo que está en `main`; se actualiza cuando Luis suba sus `.gs` |
+| — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | 🟨 | Backend v3 publicado y `URL_BACKEND` en la app (PR #15 a #17). Falta publicar `Push.gs` y `MapaCalor.gs` cuando Luis los suba |
 | 7 | Documentación Producto 2 | ⬜ | `entregables/Producto2_AlertaVecinal_Equipo.pdf` |
 | — | PDF individuales SP4–SP7 | ⬜ | Solo cuando Jaziel lo indique |
 

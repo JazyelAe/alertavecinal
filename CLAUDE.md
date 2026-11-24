@@ -3,6 +3,15 @@
 Contexto común para los 3 integrantes. Cada quien abre Claude Code **en su propia computadora, con su propia cuenta de GitHub**, dentro del repo `alertavecinal`, y pega **su** prompt de `docs/claude-kit/prompts/`.
 Idioma de todo (código, comentarios, commits, PR, documentos): **español**.
 
+## ⚠ Avisos vigentes: díselos al integrante ANTES de cualquier otra cosa
+1. **Actualiza la rama con `main` antes de trabajar (23/11).** En `main` hubo cambios que tocan archivos de otros:
+   - Jaziel corrigió la línea 5 de `apps-script/vista_verificado.html` (de Yeudiel, PR #17). Solo se cambió un comentario; **no lo reviertas**.
+   - Ya se publicó el backend: `URL_BACKEND` está en `js/firebase-config.js` y `sw.js` está en `VERSION = 'v7'`.
+
+   Ejecuta `git fetch origin` y `git log --oneline HEAD..origin/main`. Si aparece algún commit, ejecuta `git pull origin main --no-edit` y muestra el resultado al integrante. Si hay conflicto, detente y avisa a Jaziel.
+2. **En las plantillas `.html` de `apps-script/`, nunca escribas etiquetas `<?`, `<?=` ni `<?!=` dentro de un comentario.** Apps Script también las ejecuta ahí, y la vista falla en Google con *Unexpected token ';'*. Las pruebas locales no detectan este error.
+3. **El backend ya está publicado** (proyecto *AlertaVecinal Backend*, misma URL siempre). No cambies `URL_BACKEND` ni `PUSH_ENDPOINT`. Cuando se una un PR con archivos `.gs` o `.html` de `apps-script/`, Jaziel publica una versión nueva con `clasp push` y `clasp deploy -i`. Escríbelo en la descripción del PR.
+
 ## Equipo
 | # | Integrante | GitHub | Rama | Matrícula |
 |---|---|---|---|---|
