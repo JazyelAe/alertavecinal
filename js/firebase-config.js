@@ -55,7 +55,7 @@ self.PUSH_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxqImyfceIM-ht2TR2
 // Ahí viven las vistas generadas en el servidor (?vista=boletin, mapacalor, verificado) y las
 // acciones (alerta sin señal y, cuando Luis suba Push.gs, también el push).
 // Vacío = sin enlaces a vistas de servidor; "Alerta sin señal" escribe directo a Firestore.
-self.URL_BACKEND = '';
+self.URL_BACKEND = 'https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec';
 
 // Versión del SDK de Firebase que se carga desde el CDN gstatic.
 // Si la cambias, cámbiala también en los import de js/*.js y en sw-push.js.
