@@ -1,7 +1,7 @@
 rules_version = '2';
 
 // Reglas de seguridad de AlertaVecinal.
-// Se publican con:  firebase deploy --only firestore:rules
+// Se publican desde la consola de Firebase: Firestore > Reglas > Publicar.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -21,21 +21,26 @@ service cloud.firestore {
     function esAdmin() {
       return esAprobado() && miPerfil().rol == 'admin';
     }
+    // Campos que solo cambian el admin o el backend (Vecino Verificado).
+    function camposProtegidos() {
+      return ['rol', 'estado', 'verificado', 'verificadoEn', 'verificadoPor'];
+    }
 
     // ---------- Usuarios ----------
     match /usuarios/{uid} {
       // Cada quien lee su perfil; el admin lee todos.
       allow read: if autenticado() && (request.auth.uid == uid || esAdmin());
 
-      // Registro: solo puedes crear TU perfil y siempre como vecino pendiente.
+      // Registro: solo puedes crear TU perfil, siempre como vecino pendiente y sin verificar.
       allow create: if autenticado() && request.auth.uid == uid
                     && request.resource.data.rol == 'vecino'
-                    && request.resource.data.estado == 'pendiente';
+                    && request.resource.data.estado == 'pendiente'
+                    && !request.resource.data.keys().hasAny(['verificado', 'verificadoEn', 'verificadoPor']);
 
-      // Cada usuario edita solo su propio perfil, sin tocar su rol ni su estado.
+      // Cada usuario edita solo su propio perfil, sin tocar su rol, su estado ni su verificación.
       // El admin puede cambiar cualquier perfil (aprobar, suspender, cambiar rol).
       allow update: if (autenticado() && request.auth.uid == uid
-                        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['rol', 'estado']))
+                        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(camposProtegidos()))
                     || esAdmin();
 
       // Solo el admin elimina usuarios.
