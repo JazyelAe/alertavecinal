@@ -109,21 +109,43 @@ export async function notificacionLocal() {
 }
 
 /* ---------- Push real a todos los dispositivos (Google Apps Script) ----------
- * Pide al intermediario (scripts/apps-script/Codigo.gs) que envíe un push por FCM
- * para un aviso o una alerta recién creados. Solo mandamos el token de sesión y el
- * id: el script comprueba permisos y lee el texto desde Firestore.
- * Si PUSH_ENDPOINT está vacío, no hace nada (quedan las notificaciones de abajo). */
+ * Pide al backend que envíe un push por FCM para un aviso o una alerta recién creados.
+ * Solo mandamos el token de sesión y el id: el servidor comprueba permisos y lee el
+ * texto desde Firestore.
+ *  1) Backend del equipo (URL_BACKEND, acción "push" de apps-script/Push.gs).
+ *  2) Respaldo: el intermediario viejo (PUSH_ENDPOINT, scripts/apps-script/Codigo.gs),
+ *     si el backend aún no tiene Push.gs publicado o no contesta.
+ * Los dos usan el mismo documento envios/<tipo>-<id>, así que nunca se envía doble.
+ * Sin ninguna de las dos URL no hace nada (quedan las notificaciones de abajo). */
+async function pedirPush(url, cuerpo) {
+  const respuesta = await fetch(url, {
+    method: 'POST',
+    // text/plain evita la verificación CORS previa, que Apps Script no admite.
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(cuerpo)
+  });
+  return respuesta.json();
+}
+
 export async function enviarPushReal(tipo, id) {
-  if (!self.PUSH_ENDPOINT || esDemo || !auth.currentUser) return null;
+  if ((!self.URL_BACKEND && !self.PUSH_ENDPOINT) || esDemo || !auth.currentUser) return null;
+  const idToken = await auth.currentUser.getIdToken();
+  if (self.URL_BACKEND) {
+    try {
+      const resultado = await pedirPush(self.URL_BACKEND, { accion: 'push', idToken, tipo, id });
+      // "La acción «push» no existe": el backend publicado todavía no tiene Push.gs.
+      if (resultado.ok || !/acción .*push.* no existe/i.test(resultado.error || '')) {
+        console.info('[Push real] Backend:', resultado);
+        return resultado;
+      }
+    } catch (error) {
+      console.warn('[Push real] El backend no respondió:', error.message);
+    }
+  }
+  if (!self.PUSH_ENDPOINT) return null;
   try {
-    const respuesta = await fetch(self.PUSH_ENDPOINT, {
-      method: 'POST',
-      // text/plain evita la verificación CORS previa, que Apps Script no admite.
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ idToken: await auth.currentUser.getIdToken(), tipo, id })
-    });
-    const resultado = await respuesta.json();
-    console.info('[Push real]', resultado);
+    const resultado = await pedirPush(self.PUSH_ENDPOINT, { idToken, tipo, id });
+    console.info('[Push real] Intermediario:', resultado);
     return resultado;
   } catch (error) {
     console.warn('[Push real] No se pudo contactar al intermediario:', error.message);
