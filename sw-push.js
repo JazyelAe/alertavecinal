@@ -43,6 +43,9 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 /* ---- 2) Firebase Cloud Messaging en segundo plano ---- */
+// Tipos de alerta que vibran con el patrón largo (apps-script/Push.gs manda "tipo" en los datos).
+const VIBRACION_URGENTE = ['medica', 'gas'];
+
 importScripts('js/firebase-config.js');
 importScripts(`https://www.gstatic.com/firebasejs/${self.FIREBASE_SDK_VERSION}/firebase-app-compat.js`);
 importScripts(`https://www.gstatic.com/firebasejs/${self.FIREBASE_SDK_VERSION}/firebase-messaging-compat.js`);
@@ -59,6 +62,9 @@ messaging.onBackgroundMessage((payload) => {
 
   const datos = payload.data || {};
   const titulo = datos.titulo || 'AlertaVecinal';
+  // Vibración (elemento físico del dispositivo): más larga si es una emergencia médica
+  // o una fuga de gas. Android la usa; iOS y la mayoría de computadoras la ignoran.
+  const vibracion = VIBRACION_URGENTE.includes(datos.tipo) ? [300, 100, 300, 100, 300] : [200, 100, 200];
   return self.registration.showNotification(titulo, {
     body: datos.cuerpo || 'Hay una nueva alerta en tu colonia.',
     icon: 'iconos/icon-192.png',
@@ -66,7 +72,7 @@ messaging.onBackgroundMessage((payload) => {
     // Misma etiqueta que la notificación local: si llegan las dos, se ve solo una.
     tag: datos.tag || (datos.alertaId ? `alerta-${datos.alertaId}` : 'alertavecinal'),
     renotify: true,
-    vibrate: [200, 100, 200],
+    vibrate: vibracion,
     data: { url: datos.url || (datos.alertaId ? `./?alerta=${datos.alertaId}` : './') }
   });
 });

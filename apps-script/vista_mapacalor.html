@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- Plantilla de Apps Script: los datos llegan ya calculados desde MapaCalor.gs.
+       No escribas etiquetas de plantilla dentro de un comentario: Apps Script también las interpreta ahí. -->
+  <?!= estilosComunes_() ?>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <style>
+    .resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+    .cifra{font-size:1.8rem;font-weight:800;color:var(--azul)}
+    .cifra.texto{font-size:1.15rem;line-height:1.3}
+    .nota{color:var(--texto-suave);font-size:.9rem}
+    #mapa{height:380px;border-radius:10px;border:1px solid var(--borde)}
+    .barra{background:#eef3f8;border-radius:6px;height:12px;min-width:2px}
+    .barra span{display:block;height:100%;border-radius:6px;background:var(--rojo)}
+    td.num{text-align:right;font-variant-numeric:tabular-nums}
+    .tabla{overflow-x:auto}
+  </style>
+</head>
+<body>
+  <header><span class="logo">AV</span><b>AlertaVecinal</b> · Reporte de mapa de calor</header>
+  <main>
+    <div class="tarjeta">
+      <h1>Mapa de calor de incidentes</h1>
+      <p class="nota">Últimos <?= datos.dias ?> días · <?= datos.tipoNombre ?>. Las alertas se agrupan en zonas de unos
+        500 m para proteger la privacidad: no se muestran nombres, descripciones, calles ni ubicaciones exactas.</p>
+      <div class="resumen">
+        <div class="tarjeta"><div class="cifra"><?= datos.total ?></div>alertas en el periodo</div>
+        <div class="tarjeta"><div class="cifra texto"><?= datos.zonaTop ? datos.zonaTop.nombre : 'Sin datos' ?></div>
+          zona más reportada<? if (datos.zonaTop) { ?> (<?= datos.zonaTop.total ?>)<? } ?></div>
+        <div class="tarjeta"><div class="cifra texto"><?= datos.franjaTop ? datos.franjaTop.nombre : 'Sin datos' ?></div>
+          franja horaria más frecuente<? if (datos.franjaTop) { ?> (<?= datos.franjaTop.total ?>)<? } ?></div>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>Mapa</h2>
+      <? if (!datos.celdas.length) { ?>
+        <p class="nota">No hay alertas con ubicación en este periodo.</p>
+      <? } else { ?>
+        <div id="mapa" role="region" aria-label="Mapa de calor generado en el servidor"></div>
+        <p class="nota">Cada círculo es una zona de ≈ 500 m; más grande y más rojo = más alertas.
+          <?= datos.conUbicacion ?> de <?= datos.total ?> alertas tienen ubicación.</p>
+      <? } ?>
+    </div>
+
+    <div class="tarjeta tabla">
+      <h2>Zonas con más alertas</h2>
+      <? if (!datos.celdas.length) { ?>
+        <p class="nota">Sin datos.</p>
+      <? } else { ?>
+        <table>
+          <tr><th>Colonia</th><th>Centro aproximado</th><th>Total</th><th class="robo">Robo</th><th class="medica">Médica</th><th class="gas">Gas</th><th class="otro">Otro</th></tr>
+          <? for (var i = 0; i < datos.celdas.length && i < 15; i++) { var c = datos.celdas[i]; ?>
+            <tr>
+              <td><?= c.zona ?></td>
+              <td><?= c.lat.toFixed(3) ?>, <?= c.lng.toFixed(3) ?></td>
+              <td class="num"><b><?= c.total ?></b></td>
+              <td class="num"><?= c.robo ?></td><td class="num"><?= c.medica ?></td>
+              <td class="num"><?= c.gas ?></td><td class="num"><?= c.otro ?></td>
+            </tr>
+          <? } ?>
+        </table>
+      <? } ?>
+    </div>
+
+    <div class="tarjeta tabla">
+      <h2>Por franja horaria</h2>
+      <table>
+        <tr><th>Franja (hora del centro)</th><th>Alertas</th><th style="width:45%"></th></tr>
+        <? var maxFranja = Math.max.apply(null, datos.porFranja.map(function (f) { return f.total; }).concat([1])); ?>
+        <? for (var j = 0; j < datos.porFranja.length; j++) { var f = datos.porFranja[j]; ?>
+          <tr>
+            <td><?= f.nombre ?></td>
+            <td class="num"><?= f.total ?></td>
+            <td><div class="barra"><span style="width:<?= Math.round(100 * f.total / maxFranja) ?>%"></span></div></td>
+          </tr>
+        <? } ?>
+      </table>
+    </div>
+
+    <div class="tarjeta tabla">
+      <h2>Por colonia</h2>
+      <table>
+        <tr><th>Colonia</th><th>Alertas</th></tr>
+        <? for (var k = 0; k < datos.porZona.length; k++) { ?>
+          <tr><td><?= datos.porZona[k].nombre ?></td><td class="num"><?= datos.porZona[k].total ?></td></tr>
+        <? } ?>
+      </table>
+    </div>
+
+    <p style="text-align:center"><a href="https://jazyelae.github.io/alertavecinal/" target="_top">Abrir la aplicación AlertaVecinal</a></p>
+  </main>
+  <footer class="ssr">Generado en el servidor (Google Apps Script) el <?= datos.generadoEn ?>.</footer>
+
+  <? if (datos.celdas.length) { ?>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    // Datos YA agregados en el servidor: el navegador solo los dibuja, no consulta Firestore.
+    var CELDAS = <?!= jsonCalor_(datos.celdas) ?>;
+    (function () {
+      if (!window.L) { document.getElementById('mapa').textContent = 'No se pudo cargar el mapa; las tablas tienen los mismos datos.'; return; }
+      var mapa = L.map('mapa');
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+      }).addTo(mapa);
+      var maximo = CELDAS[0].total;
+      var color = function (t) { var r = t / maximo; return r > 0.75 ? '#e63946' : r > 0.5 ? '#f4a261' : r > 0.25 ? '#e9c46a' : '#2a9d8f'; };
+      var limites = [];
+      CELDAS.forEach(function (c) {
+        L.circle([c.lat, c.lng], {
+          radius: 120 + 280 * Math.sqrt(c.total / maximo), color: color(c.total), fillColor: color(c.total), fillOpacity: 0.45, weight: 1
+        }).bindTooltip(c.total + ' alerta(s): robo ' + c.robo + ', médica ' + c.medica + ', gas ' + c.gas + ', otro ' + c.otro)
+          .addTo(mapa);
+        limites.push([c.lat, c.lng]);
+      });
+      mapa.fitBounds(limites, { padding: [30, 30], maxZoom: 15 });
+    })();
+  </script>
+  <? } ?>
+</body>
+</html>

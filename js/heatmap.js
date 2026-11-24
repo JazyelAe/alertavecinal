@@ -4,7 +4,7 @@
  * con filtros por tipo y por rango de fechas, y un resumen de las
  * calles con más incidentes.
  */
-import { onSesion, aFecha } from './auth.js';
+import { onSesion, aFecha, aviso, agregarMenu } from './auth.js';
 
 const PLUGIN_HEAT = 'https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js';
 let mapaCalor = null;
@@ -55,11 +55,45 @@ function crearTarjeta() {
       <label>Hasta <input type="date" id="calor-hasta" value="${fechaInput(hoy)}"></label>
     </div>
     <div id="mapa-calor" class="mapa" role="region" aria-label="Mapa de calor"></div>
-    <p id="calor-resumen" class="resumen-calor"></p>`;
+    <p id="calor-resumen" class="resumen-calor"></p>
+    ${self.URL_BACKEND ? `<p class="nota"><a id="calor-reporte" href="${urlReporte()}" target="_blank" rel="noopener">
+      Ver reporte generado en el servidor</a> (últimos 30 días, agrupado por zona y por hora).</p>` : ''}`;
   contenedor.appendChild(tarjeta);
   ['calor-tipo', 'calor-desde', 'calor-hasta'].forEach((id) =>
     document.getElementById(id).addEventListener('change', actualizar));
+  const enlace = document.getElementById('calor-reporte');
+  if (enlace) {
+    protegerSinConexion(enlace);
+    // El reporte respeta el tipo elegido en el filtro.
+    document.getElementById('calor-tipo').addEventListener('change', (e) => { enlace.href = urlReporte(e.target.value); });
+  }
   return true;
+}
+
+/* ---------- Reporte generado en el servidor (apps-script/MapaCalor.gs) ----------
+ * Apps Script agrega las alertas por zona, tipo y franja horaria y devuelve la página ya armada.
+ * Es de otro origen, así que no se guarda en caché: sin conexión avisamos en lugar de abrirla. */
+function urlReporte(tipo = 'todos') {
+  return `${self.URL_BACKEND}?vista=mapacalor${tipo && tipo !== 'todos' ? '&tipo=' + encodeURIComponent(tipo) : ''}`;
+}
+
+function protegerSinConexion(enlace) {
+  enlace.addEventListener('click', (e) => {
+    if (!navigator.onLine) {
+      e.preventDefault();
+      aviso('El reporte de calor se genera en el servidor y necesita conexión a Internet.', 'info');
+    }
+  });
+}
+
+function agregarEnlaceReporte() {
+  if (!self.URL_BACKEND) return;
+  const li = agregarMenu({ id: 'menu-reporte-calor', texto: 'Reporte de calor', href: urlReporte() });
+  const enlace = (li || document.getElementById('menu-reporte-calor'))?.querySelector('a');
+  if (!enlace) return;
+  enlace.target = '_blank';
+  enlace.rel = 'noopener';
+  protegerSinConexion(enlace);
 }
 
 // Aplica los filtros y devuelve las alertas que se van a pintar.
@@ -116,6 +150,7 @@ async function iniciar() {
 }
 
 document.addEventListener('av:alertas', (e) => { alertas = e.detail; actualizar(); });
+agregarEnlaceReporte();
 
 onSesion(({ perfil }) => {
   if (perfil?.estado === 'aprobado') iniciar().then(() => mapaCalor?.invalidateSize());
