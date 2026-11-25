@@ -3,17 +3,15 @@
 Leyenda: ⬜ pendiente · 🟨 en curso · 🛑 esperando revisión · ✅ terminado (fusionado en `main`)
 Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 
-## Estado del repositorio (auditoría del 23/11/2026, noche)
-- `main` tiene 17 PR fusionados: #1, #2, #5 a #10 y #13 a #17 (Jaziel), #3, #11 y #12 (Yeudiel) y #4 (Luis). No hay PR abiertos.
-- Yeudiel subió el 23/11 Vecino Verificado Pro, la ficha de servidor y su sección del Producto 2 (PR #11 y #12).
-- Luis no ha subido nada desde el 21/11.
-- La app abre sin errores en GitHub Pages, con **Panel Pro** y **Boletín** en el menú: https://jazyelae.github.io/alertavecinal/. Ningún recurso da 404.
-- `entregables/Subproducto4_API_Cache.pdf` ya es la versión final (PR #9). Los PDF finales del Subproducto 5, el Subproducto 6 y la guía están en los zips más recientes de Luis y Yeudiel.
-- **Backend publicado** (proyecto *AlertaVecinal Backend*, implementación *Backend v3*): https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec. Responde `configurado: true`; funcionan en línea la vista `boletin`, la vista `verificado` y las acciones `alerta_sin_senal` y `verificar`. `URL_BACKEND` ya está en la app y `sw.js` subió a v7 (PR #15).
-- **Error corregido (PR #16 y #17):** las dos plantillas tenían etiquetas `<?= ?>` dentro de un comentario y fallaban en Google con *Unexpected token ';'*. Se corrigió la línea 5 de `vista_boletin.html` y la de `vista_verificado.html` (de Yeudiel). **Luis y Yeudiel deben hacer `git pull origin main` antes de seguir.**
-- El push publicado sigue en `scripts/apps-script/Codigo.gs` (`PUSH_ENDPOINT`) hasta que Luis suba `Push.gs`.
+## Estado del repositorio (auditoría del 24/11/2026, noche)
+- `main` tiene 24 PR fusionados y ninguno abierto. **Luis y Yeudiel terminaron todas sus tareas** (PR #20 a #23, el 24/11).
+- La app abre sin errores en GitHub Pages con todos los módulos: https://jazyelae.github.io/alertavecinal/. Ningún recurso da 404.
+- Los PDF finales están en `entregables/`: Subproducto 4 (PR #9), Subproducto 5 y guía (PR #21), Subproducto 6 (PR #20) y **Producto 2** (PR #24, 35 páginas).
+- **Backend v4 publicado** (proyecto *AlertaVecinal Backend*, misma URL): https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec. Vistas `boletin`, `mapacalor` y `verificado`; acciones `alerta_sin_senal`, `push` y `verificar`. Las 62 pruebas locales de `apps-script/pruebas/` pasan.
+- Desde el v4, la app manda el push por `URL_BACKEND` (`Push.gs`); `PUSH_ENDPOINT` queda como respaldo.
 - `firestore.rules` publicadas el 23/11, con foto de la cámara y verificación protegida (PR #14).
 - No hay secretos en el historial (ninguna `BEGIN PRIVATE KEY`).
+- En la gráfica de *Insights → Contributors* aparece también "claude": 8 commits de Jaziel del 21/11 llevan la línea `Co-Authored-By: Claude`.
 
 ## ▶ Lo que falta, por persona (léelo primero)
 
@@ -47,9 +45,10 @@ Ya está en `main`: panel de administración y botón de instalar (PR #3), Vecin
 ### Jaziel
 - Unir los Pull Request de Luis y Yeudiel (*Merge pull request* > *Create a merge commit*).
 - ✅ Publicar `firestore.rules` (23/11). ⬜ Probar la cámara en el teléfono.
-- ✅ Primer despliegue del backend y `URL_BACKEND` (23/11). ⬜ Cuando Luis suba `Push.gs` y `MapaCalor.gs`: `clasp push` y `clasp deploy -i` con la misma implementación.
-- ⬜ Escribir `docs/producto2/jaziel.md` y el script del PDF del Producto 2.
-- ⬜ Pruebas con la base real y documento final del Producto 2.
+- ✅ Despliegue del backend: v3 el 23/11 y **v4 el 24/11** con `Push.gs` y `MapaCalor.gs`.
+- ✅ `docs/producto2/jaziel.md`, `generar_pdf.py` y el PDF del Producto 2 (PR #19 y #24).
+- ⬜ Pruebas con cuenta real y teléfono: J-17 a J-22, y probar el push del backend v4 enviando un aviso "PRUEBA".
+- ⬜ Revisar el PDF del Producto 2 y regenerarlo si alguien actualiza su sección.
 
 En cada PR, Luis y Yeudiel avisan si Jaziel debe hacer `clasp push` y una nueva implementación.
 
@@ -63,8 +62,8 @@ En cada PR, Luis y Yeudiel avisan si Jaziel debe hacer `clasp push` y una nueva 
 | 4 | Backend de la aportación Alerta sin señal | ✅ | PR #7. Prueba local 9/9 (incluye la foto) |
 | 5 | Dispositivo: cámara, vibración y compartir en alertas | ✅ | PR #8 (Pages en v6). Falta: Jaziel publica `firestore.rules` y prueba en su teléfono |
 | 6 | Datos offline: persistencia de Firestore | ✅ | PR #8. Caché `persistent` verificada |
-| — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | 🟨 | Backend v3 publicado y `URL_BACKEND` en la app (PR #15 a #17). Falta publicar `Push.gs` y `MapaCalor.gs` cuando Luis los suba |
-| 7 | Documentación Producto 2 | ⬜ | `entregables/Producto2_AlertaVecinal_Equipo.pdf` |
+| — | Despliegue (clasp, URL_BACKEND, Pages, dominios de Firebase) | ✅ | Backend v4 publicado el 24/11 con las partes de los tres |
+| 7 | Documentación Producto 2 | ✅ | `entregables/Producto2_AlertaVecinal_Equipo.pdf` (PR #24). Se regenera con `python docs/producto2/generar_pdf.py` |
 | — | PDF individuales SP4–SP7 | ⬜ | Solo cuando Jaziel lo indique |
 
 ## Luis (`luis`)
