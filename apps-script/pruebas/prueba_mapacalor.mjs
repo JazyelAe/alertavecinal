@@ -97,8 +97,11 @@ prueba('Privacidad: sin nombres, descripciones, calles, números ni coordenadas 
 });
 
 prueba('Una dirección con </script> no puede inyectar código', () => {
-  const dentroDelScript = html.split('var CELDAS = ')[1].split(';\n')[0];
+  // El fin de línea puede ser \n o \r\n: en Windows, git convierte los archivos a CRLF al clonarlos.
+  const dentroDelScript = html.match(/var CELDAS = (.*);\r?\n/)[1];
   assert.doesNotMatch(dentroDelScript, /<\/script>/i);
+  // Escapado no es lo mismo que perdido: al leerlo, el navegador recupera la dirección original.
+  assert.ok(JSON.parse(dentroDelScript).some((c) => c.zona === '</script><script>alert(1)</script>, Puebla'));
   assert.equal((html.match(/<script>alert\(1\)/g) || []).length, 0);
   assert.match(html, /&lt;\/script&gt;/);   // en la tabla aparece escapado
 });
