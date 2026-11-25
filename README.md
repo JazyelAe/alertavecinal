@@ -57,6 +57,10 @@ Proyecto del **Producto 2 · Unidad II** de *Aplicaciones Web Progresivas* · Pr
 |---|---|
 | ![Reporte de mapa de calor en Apps Script](docs/producto2/evidencias/luis-07-reporte-calor-servidor.jpg) | ![Tabla de zonas con más alertas](docs/producto2/evidencias/luis-08-reporte-calor-zonas.jpg) |
 
+**Demo push en escritorio:** permiso concedido, service worker activo y Push API disponible (token FCM oculto).
+
+![Página de demostración de notificaciones push](docs/producto2/evidencias/luis-09-demo-push.jpg)
+
 Más evidencias en [`docs/producto2/evidencias/`](docs/producto2/evidencias/).
 
 ---
