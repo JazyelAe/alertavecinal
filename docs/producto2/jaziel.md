@@ -140,7 +140,7 @@ Así, **un vecino no puede volverse administrador ni aprobarse solo**, aunque mo
 
 ## 4. Reporte de pruebas (casos de Jaziel)
 
-Las pruebas J-01 a J-16 se ejecutaron el **23/11/2026** con Playwright sobre la **app publicada**, en modo demostración (`?demo=1`), con el script `docs/producto2/pruebas/pruebas_jaziel.js`; los resultados quedan en `docs/producto2/pruebas/resultados_jaziel.json`. Las que necesitan una cuenta real o un teléfono quedan como **Pendiente** hasta probarlas.
+Las pruebas J-01 a J-16 se ejecutaron el **23/11/2026** con Playwright sobre la **app publicada**, en modo demostración (`?demo=1`), con el script `docs/producto2/pruebas/pruebas_jaziel.js`; los resultados quedan en `docs/producto2/pruebas/resultados_jaziel.json`. Las pruebas J-17 a J-22 se hicieron a mano el **24/11/2026** con la base de datos real, un iPhone con la app instalada y la computadora como segundo dispositivo; sus capturas están en el apartado 5.
 
 | ID | Requisito | Pasos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|
@@ -160,12 +160,12 @@ Las pruebas J-01 a J-16 se ejecutaron el **23/11/2026** con Playwright sobre la 
 | J-14 | Backend | Consultar la URL `/exec` | Responde configurado | `configurado: true`, vistas `boletin` y `verificado` | ✅ |
 | J-15 | Vista del servidor | Abrir `/exec?vista=boletin` | HTML generado en el servidor con su pie | Pie "Generado en el servidor el …" | ✅ |
 | J-16 | Privacidad del boletín | Revisar el texto del boletín | Sin correos, nombres ni números de casa | Correcto | ✅ |
-| J-17 | Reglas: vecino no puede volverse admin | Con una cuenta de vecino, intentar cambiar su `rol` a `admin` | Firestore rechaza el cambio | — | Pendiente (prueba manual) |
-| J-18 | Cámara real | En un teléfono Android, "Agregar foto" con la cámara trasera y enviar | La alerta llega con la foto | — | Pendiente (teléfono) |
-| J-19 | Vibración | Con la app abierta en un teléfono, otro vecino envía una alerta | El teléfono vibra | — | Pendiente (teléfono) |
-| J-20 | Compartir nativo | En Android, pulsar "Compartir" | Abre el menú de compartir del sistema | — | Pendiente (teléfono) |
-| J-21 | Persistencia de Firestore | Con cuenta real, ver alertas, activar modo avión y recargar | Se siguen viendo las alertas ya cargadas | — | Pendiente (cuenta real) |
-| J-22 | Alerta sin señal por el backend | Con cuenta real, enviar sin señal y volver a conectar | La alerta llega con `origen: 'sin-senal'` y hora del servidor | — | Pendiente (cuenta real) |
+| J-17 | Push del backend (app abierta y cerrada) | Desde Administración, enviar un aviso a todos; en el teléfono, primero con la app abierta y luego cerrada | Llega el aviso dentro de la app y en la pantalla de inicio | Llegó en los dos casos (iPhone con la app instalada, permiso concedido) | ✅ |
+| J-18 | Cámara real | En el teléfono, "Agregar foto" con la cámara y enviar la alerta | La alerta llega a los demás con la foto | Foto comprimida a 96 KB; la alerta llegó a la computadora con su foto y aviso | ✅ |
+| J-19 | Vibración | Con la app abierta en el teléfono, otro vecino envía una alerta | El teléfono vibra | Vibró al llegar la alerta | ✅ |
+| J-20 | Compartir nativo | En el teléfono, pulsar "Compartir" en una alerta | Abre el menú de compartir del sistema | Abrió el menú de compartir de iOS con el título de la alerta y el enlace | ✅ |
+| J-21 | Persistencia de Firestore | Con la cuenta real, con las alertas cargadas, activar modo avión | Se siguen viendo las alertas ya cargadas | Con "Sin conexión" la lista siguió mostrando las 12 alertas | ✅ |
+| J-22 | Alerta sin señal con cuenta real | En modo avión, enviar una alerta y luego quitar el modo avión | La alerta se guarda en el teléfono y se envía sola al volver la señal | Aviso "tu alerta se guardó en el teléfono"; al reconectar llegó "Robo prueba" (13 alertas) | ✅ |
 
 ---
 
@@ -191,6 +191,16 @@ Las pruebas J-01 a J-16 se ejecutaron el **23/11/2026** con Playwright sobre la 
 
 ![Código fuente del boletín: los datos ya vienen dentro del HTML que genera el servidor.](evidencias/jaziel-10-boletin-codigo-fuente.png)
 
+### Pruebas con la base de datos real y un teléfono
+
+![Notificación push enviada por el backend: con la app abierta (izquierda) y con la app cerrada, en la pantalla de inicio del iPhone (derecha).](evidencias/jaziel-11-push-real.png)
+
+![Cámara: la foto tomada en el teléfono se comprime a 96 KB (izquierda) y la alerta llega a la computadora con su foto y su aviso (derecha).](evidencias/jaziel-12-camara-real.png)
+
+![Compartir: el botón abre el menú nativo del teléfono con el título y el enlace de la alerta (los contactos se ocultaron).](evidencias/jaziel-13-compartir-real.png)
+
+![Sin conexión con la cuenta real: la lista sigue visible (izquierda), la alerta se guarda en el teléfono (centro) y se envía sola al volver la señal (derecha).](evidencias/jaziel-14-sin-senal-real.png)
+
 ### Funciones de Luis y Yeudiel
 Capturas tomadas por el coordinador sobre la app publicada (`docs/producto2/pruebas/evidencias_equipo.js`), siguiendo las evidencias que propusieron Luis y Yeudiel en sus secciones.
 
@@ -215,12 +225,10 @@ Capturas tomadas por el coordinador sobre la app publicada (`docs/producto2/prue
 | Aplicación publicada | https://jazyelae.github.io/alertavecinal/ |
 | Aplicación en modo demostración | https://jazyelae.github.io/alertavecinal/?demo=1 |
 | Repositorio | https://github.com/JazyelAe/alertavecinal |
-| Integrantes y sus commits | https://github.com/JazyelAe/alertavecinal/graphs/contributors |
 | Backend (estado) | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec |
 | Vista de servidor: boletín | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec?vista=boletin |
 | Vista de servidor: reporte de mapa de calor | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec?vista=mapacalor |
 
-![Insights → Contributors del repositorio: los commits de cada integrante en la rama main.](evidencias/equipo-07-contributors.png)
 
 ---
 
