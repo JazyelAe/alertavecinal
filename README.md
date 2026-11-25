@@ -11,7 +11,7 @@ Proyecto del **Producto 2 · Unidad II** de *Aplicaciones Web Progresivas* · Pr
 | ⚙️ **Backend (Google Apps Script)** | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec |
 | 📰 Vista de servidor: Boletín público | [`…/exec?vista=boletin`](https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec?vista=boletin) |
 | 🏅 Vista de servidor: Ficha de Vecino Verificado | `…/exec?vista=verificado&uid=<uid>` (se abre desde **Panel Pro → Ver mi ficha pública**) |
-| 🔥 Vista de servidor: Reporte de mapa de calor | `…/exec?vista=mapacalor` (código en el repo; pendiente de publicar en el backend) |
+| 🔥 Vista de servidor: Reporte de mapa de calor | [`…/exec?vista=mapacalor`](https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec?vista=mapacalor) |
 | 📦 Repositorio | https://github.com/JazyelAe/alertavecinal |
 
 ---
@@ -92,7 +92,7 @@ Más evidencias en [`docs/producto2/evidencias/`](docs/producto2/evidencias/).
 | Evidencias de las características de la PWA | Sección 5 del documento; capturas en [`docs/producto2/evidencias/`](docs/producto2/evidencias/) |
 | Vínculo (URL) de la aplicación publicada | https://jazyelae.github.io/alertavecinal/ |
 
-El PDF del equipo se genera con `docs/producto2/generar_pdf.py` y se guarda en `entregables/Producto2_AlertaVecinal_Equipo.pdf` (pendiente al momento de este commit).
+📄 **Documento completo:** [`entregables/Producto2_AlertaVecinal_Equipo.pdf`](entregables/Producto2_AlertaVecinal_Equipo.pdf), generado con `docs/producto2/generar_pdf.py` a partir de las secciones de cada integrante.
 
 ---
 
@@ -218,7 +218,7 @@ node apps-script/pruebas/prueba_verificado.mjs
 | Subproducto 5 · Aportación | [`entregables/Subproducto5_Aportacion.pdf`](entregables/Subproducto5_Aportacion.pdf) |
 | Subproducto 6 · Notificaciones | [`entregables/Subproducto6_Notificaciones.pdf`](entregables/Subproducto6_Notificaciones.pdf) |
 | Guía del repositorio | [`entregables/GUIA_REPOSITORIO.md`](entregables/GUIA_REPOSITORIO.md) · [PDF](entregables/GUIA_REPOSITORIO.pdf) |
-| Producto 2 (documento del equipo) | `entregables/Producto2_AlertaVecinal_Equipo.pdf` (pendiente) |
+| **Producto 2 (documento del equipo)** | [`entregables/Producto2_AlertaVecinal_Equipo.pdf`](entregables/Producto2_AlertaVecinal_Equipo.pdf) |
 
 ---
 
