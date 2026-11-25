@@ -53,9 +53,9 @@ Proyecto del **Producto 2 · Unidad II** de *Aplicaciones Web Progresivas* · Pr
 |---|---|---|
 | ![Mapa de calor filtrado por robo](docs/producto2/evidencias/luis-04-filtro-robo.jpg) | ![Notificación del sistema de AlertaVecinal](docs/producto2/evidencias/luis-05-push-app-cerrada.jpg) | ![Alerta de robo en la lista en tiempo real](docs/producto2/evidencias/luis-06-alerta-que-genero-el-push.jpg) |
 
-| Reporte de mapa de calor generado en el servidor | Zonas con más alertas (agregadas en Apps Script) |
-|---|---|
-| ![Reporte de mapa de calor en Apps Script](docs/producto2/evidencias/luis-07-reporte-calor-servidor.jpg) | ![Tabla de zonas con más alertas](docs/producto2/evidencias/luis-08-reporte-calor-zonas.jpg) |
+| Aviso dentro de la página con la app abierta | Reporte de mapa de calor generado en el servidor | Zonas con más alertas (agregadas en Apps Script) |
+|---|---|---|
+| ![Aviso de emergencia médica dentro de la app](docs/producto2/evidencias/luis-10-push-app-abierta.jpg) | ![Reporte de mapa de calor en Apps Script](docs/producto2/evidencias/luis-07-reporte-calor-servidor.jpg) | ![Tabla de zonas con más alertas](docs/producto2/evidencias/luis-08-reporte-calor-zonas.jpg) |
 
 **Demo push en escritorio:** permiso concedido, service worker activo y Push API disponible (token FCM oculto).
 

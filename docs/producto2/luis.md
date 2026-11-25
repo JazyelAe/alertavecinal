@@ -110,7 +110,7 @@ Además desarrollé dos partes base de la PWA:
 
 ## 4. Reporte de pruebas (casos de Luis)
 
-Las pruebas L-01 a L-08 se ejecutaron el **24/11/2026** sobre la **app publicada** (`https://jazyelae.github.io/alertavecinal/`) en modo demostración (`?demo=1`), desde un navegador Chromium. L-09 a L-11 son pruebas locales del backend con el simulador del equipo (`apps-script/pruebas/`). L-12, L-13 y L-16 se probaron a mano el **25/11/2026** en un celular Android con una cuenta real (capturas `luis-0*.jpg` en `docs/producto2/evidencias/`). Solo se marca ✅ lo que se ejecutó; lo que necesita un teléfono, una cuenta real o el backend publicado queda como **Pendiente**.
+Las pruebas L-01 a L-08 se ejecutaron el **24/11/2026** sobre la **app publicada** (`https://jazyelae.github.io/alertavecinal/`) en modo demostración (`?demo=1`), desde un navegador Chromium. L-09 a L-11 son pruebas locales del backend con el simulador del equipo (`apps-script/pruebas/`). L-12, L-13, L-14 y L-16 se probaron a mano el **25/11/2026** en un celular Android con una cuenta real (capturas `luis-0*.jpg` en `docs/producto2/evidencias/`). Solo se marca ✅ lo que se ejecutó; lo que necesita un teléfono, una cuenta real o el backend publicado queda como **Pendiente**.
 
 | ID | Requisito | Pasos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|
@@ -127,7 +127,7 @@ Las pruebas L-01 a L-08 se ejecutaron el **24/11/2026** sobre la **app publicada
 | L-11 | Vista de servidor: reporte | `node apps-script/pruebas/prueba_mapacalor.mjs` | Agrega por zona, colonia y franja; datos dentro del HTML; pie "Generado en el servidor"; sin datos personales | 9/9 pruebas correctas | ✅ |
 | L-12 | Permiso de notificaciones | En el celular (Brave, Android), pulsar "Activar notificaciones" y aceptar | Se obtiene el token FCM y se guarda en `tokens` | Permiso concedido; el teléfono recibe las notificaciones de las alertas de otros vecinos (ver L-13) | ✅ (25/11/2026) |
 | L-13 | Push con la app cerrada | Cerrar la app y que otro vecino envíe una alerta | Llega la notificación del sistema y abre la alerta al tocarla | Otro vecino envió un robo en Av. Allende; llegó «Robo · AlertaVecinal» a la bandeja de Android con la app cerrada (`luis-05-push-app-cerrada.jpg`) | ✅ (25/11/2026) |
-| L-14 | Push con la app abierta | Con la app a la vista, otro vecino envía una alerta | Aviso dentro de la página | — | Pendiente (cuenta real) |
+| L-14 | Push con la app abierta | Con la app a la vista, otro vecino envía una alerta | Aviso dentro de la página | Otro vecino envió una emergencia médica en Av. Allende; apareció el aviso «Emergencia médica · AlertaVecinal» con los botones «Cerrar» y «Ver alerta» (`luis-10-push-app-abierta.jpg`) | ✅ (25/11/2026) |
 | L-15 | Vibración real | En un teléfono Android, recibir una alerta de emergencia médica | Vibración larga | — | Pendiente (teléfono) |
 | L-16 | Reporte publicado | Abrir `…/exec?vista=mapacalor` | Página con los datos ya agregados por el servidor | El reporte publicado muestra el mapa por zonas de ≈ 500 m, «Zonas con más alertas», franja horaria y colonia (18 de 18 alertas con ubicación) (`luis-07`, `luis-08`) | ✅ (25/11/2026) |
 | L-17 | Enlace al reporte | En la app publicada, menú "Reporte de calor" | Abre el reporte en otra pestaña | — | Pendiente (el enlace llega a la app al fusionar el PR #20) |
