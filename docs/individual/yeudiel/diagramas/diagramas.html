@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diagramas · Yeudiel</title>
+<style>
+  body { margin:0; font-family:Segoe UI,Roboto,Arial,sans-serif; background:#fff; color:#1b263b; }
+  .lienzo { width:1000px; padding:28px; box-sizing:border-box; }
+  h2 { margin:0 0 18px; font-size:22px; color:#7B173B; }
+  .fila { display:flex; align-items:stretch; gap:0; }
+  .caja { flex:1; border:2px solid #1d3557; border-radius:12px; padding:12px; background:#f4f6fa; font-size:14px; line-height:1.35; }
+  .caja b { display:block; color:#1d3557; font-size:15px; margin-bottom:4px; }
+  .caja.srv { background:#fff4e0; border-color:#e76f51; } .caja.srv b { color:#b4472c; }
+  .caja.db { background:#e6f4f1; border-color:#2a9d8f; } .caja.db b { color:#1f7a6f; }
+  .caja.disp { background:#e8f0fb; border-color:#457b9d; }
+  .flecha { width:46px; display:flex; align-items:center; justify-content:center; font-size:28px; color:#7B173B; flex:none; }
+  .abajo { text-align:center; font-size:28px; color:#7B173B; margin:6px 0; }
+  .nota { font-size:13px; color:#555; margin-top:14px; }
+  .etq { font-size:11px; color:#7B173B; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+  .decision { border-style:dashed; }
+</style>
+</head>
+<body>
+
+<!-- 1. Flujo de Vecino Verificado Pro -->
+<div class="lienzo" id="d-verificado">
+  <h2>Flujo de la aportación «Vecino Verificado Pro»</h2>
+  <div class="fila">
+    <div class="caja"><span class="etq">1 · Vecino</span><b>Se registra</b>Crea su cuenta en la PWA. Su perfil queda <i>pendiente</i> en Firestore.</div>
+    <div class="flecha">➜</div>
+    <div class="caja"><span class="etq">2 · Administrador</span><b>Aprueba la cuenta</b>En Administración cambia el estado a <i>aprobado</i>.</div>
+    <div class="flecha">➜</div>
+    <div class="caja srv"><span class="etq">3 · Comité</span><b>Verifica el domicilio</b>Botón «Verificar domicilio» → POST <code>accion_verificar</code> a Apps Script.</div>
+  </div>
+  <div class="abajo">⬇</div>
+  <div class="fila">
+    <div class="caja db"><span class="etq">6 · Cualquier persona</span><b>Ve la ficha pública</b>Enlace compartible: nombre corto, sellos, conteos e insignia. Sin datos sensibles.</div>
+    <div class="flecha">⬅</div>
+    <div class="caja srv"><span class="etq">5 · Servidor</span><b>Genera la ficha</b><code>vista_verificado</code> lee Firestore y arma el HTML en Apps Script.</div>
+    <div class="flecha">⬅</div>
+    <div class="caja"><span class="etq">4 · Vecino</span><b>Panel Pro</b>Ve su insignia y sus alertas útiles; pulsa «Ver mi ficha pública».</div>
+  </div>
+  <p class="nota">Alerta útil = trae GPS y una descripción de al menos 15 caracteres, o trae foto. Insignias: Nuevo → Colaborador (1 útil) → Vecino confiable (3 útiles y 30 días) → Guardián (8 útiles y 90 días).</p>
+</div>
+
+<!-- 2. Flujo de notificaciones push -->
+<div class="lienzo" id="d-push">
+  <h2>Flujo de una notificación push en AlertaVecinal</h2>
+  <div class="fila">
+    <div class="caja disp"><span class="etq">1 · Vecino A</span><b>Envía una alerta</b>La PWA la guarda en Firestore y llama a Apps Script con su idToken.</div>
+    <div class="flecha">➜</div>
+    <div class="caja srv"><span class="etq">2 · Apps Script</span><b>accion_push</b>Verifica la sesión, lee la alerta y los tokens, firma con la cuenta de servicio.</div>
+    <div class="flecha">➜</div>
+    <div class="caja db"><span class="etq">3 · FCM</span><b>Firebase Cloud Messaging</b>API HTTP v1 entrega el mensaje a cada token registrado (VAPID).</div>
+  </div>
+  <div class="abajo">⬇</div>
+  <div class="fila">
+    <div class="caja disp"><span class="etq">6 · Vecino B</span><b>Toca la notificación</b><code>notificationclick</code> abre o enfoca la app en la alerta.</div>
+    <div class="flecha">⬅</div>
+    <div class="caja"><span class="etq">5 · Service worker</span><b>showNotification()</b>Con la app cerrada: <code>onBackgroundMessage</code> muestra la notificación y vibra.</div>
+    <div class="flecha">⬅</div>
+    <div class="caja"><span class="etq">4 · Navegador de B</span><b>Recibe el push</b>Abierta: <code>onMessage</code> (primer plano). Cerrada: el service worker (segundo plano).</div>
+  </div>
+  <p class="nota">El token FCM se obtiene una vez con <code>getToken(messaging, {vapidKey})</code> después de <code>Notification.requestPermission()</code> y se guarda en Firestore.</p>
+</div>
+
+<!-- 3. Arquitectura del backend de la aportación -->
+<div class="lienzo" id="d-backend">
+  <h2>Backend de «Vecino Verificado Pro» (Google Apps Script)</h2>
+  <div class="fila">
+    <div class="caja disp"><span class="etq">Cliente</span><b>PWA (GitHub Pages)</b><code>admin.js</code> → POST text/plain<br><code>{accion:"verificar", idToken, uid, verificado}</code><br><br><code>estadisticas.js</code> → enlace GET<br><code>?vista=verificado&amp;uid=…</code></div>
+    <div class="flecha">➜</div>
+    <div class="caja srv"><span class="etq">Servidor</span><b>Apps Script · Comun.gs</b><code>doGet</code> → <code>vista_verificado(e)</code><br><code>doPost</code> → <code>accion_verificar(d)</code><br><br><b>Verificado.gs</b>valida uid, sesión y rol admin; calcula indicadores; <code>renderVista_</code> con <code>vista_verificado.html</code></div>
+    <div class="flecha">➜</div>
+    <div class="caja db"><span class="etq">Datos</span><b>Firestore (API REST)</b><code>leerDoc_</code>, <code>consultar_</code>, <code>actualizarDoc_</code> con token OAuth de la cuenta de servicio (guardada en Propiedades del script).<br><br><b>Firebase Auth</b> valida el idToken.</div>
+  </div>
+  <p class="nota">Respuestas: la vista devuelve HTML generado en el servidor; la acción devuelve JSON <code>{ok, uid, verificado}</code> o <code>{ok:false, error}</code>.</p>
+</div>
+
+</body>
+</html>
