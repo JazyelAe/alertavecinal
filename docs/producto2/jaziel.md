@@ -124,8 +124,8 @@ Así, **un vecino no puede volverse administrador ni aprobarse solo**, aunque mo
 | Implementación | Aplicación web · Ejecutar como: el dueño · Acceso: cualquier usuario |
 | Propiedades del script | `SERVICE_ACCOUNT`: clave de la cuenta de servicio de Firebase (su valor **no** se publica) |
 | Router (`Comun.gs`) | `GET ?vista=nombre` llama a `vista_nombre(e)` y devuelve HTML; `POST {accion}` llama a `accion_nombre(datos)` y devuelve JSON |
-| Vistas publicadas | `boletin` (Jaziel), `verificado` (Yeudiel) y `mapacalor` (Luis, pendiente) |
-| Acciones publicadas | `alerta_sin_senal` (Jaziel), `verificar` (Yeudiel) y `push` (Luis, pendiente) |
+| Vistas publicadas | `boletin` (Jaziel), `verificado` (Yeudiel) y `mapacalor` (Luis) |
+| Acciones publicadas | `alerta_sin_senal` (Jaziel), `verificar` (Yeudiel) y `push` (Luis) |
 | Seguridad | Cada acción verifica el token de sesión de Firebase y que el vecino esté aprobado |
 
 ### GitHub Pages
