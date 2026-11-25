@@ -94,7 +94,8 @@ def anchos_columnas(filas):
     """Cada columna recibe al menos el ancho de su palabra más larga (para no partirla)
     y el resto del ancho se reparte según cuánto texto tiene en promedio."""
     columnas = range(len(filas[0]))
-    celdas = [[re.sub(r"[`*]", "", f[c]) if c < len(f) else "" for f in filas] for c in columnas]
+    visible = lambda x: re.sub(r"[`*]", "", x).replace("✅", "Aprobada").replace("❌", "Falla")
+    celdas = [[visible(f[c]) if c < len(f) else "" for f in filas] for c in columnas]
     palabra_larga = [max((len(p) for texto in col for p in texto.split()), default=4) for col in celdas]
     minimos = [min(130, 4.6 * n + 14) for n in palabra_larga]
     pesos = [max(4, sum(len(x) for x in col) / len(col)) for col in celdas]

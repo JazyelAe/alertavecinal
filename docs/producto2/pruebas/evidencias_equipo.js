@@ -1,6 +1,6 @@
 /*
- * evidencias_equipo.js - Capturas de las funciones de Luis y Yeudiel y de los integrantes en
- * GitHub, para el apartado 5 y 6 del Producto 2 (docs/producto2/evidencias/equipo-*.png).
+ * evidencias_equipo.js - Capturas de las funciones de Luis y Yeudiel para el apartado 5
+ * del Producto 2 (docs/producto2/evidencias/equipo-*.png).
  * Las toma Jaziel como coordinador, sobre la app PUBLICADA en modo demostración.
  *
  * Uso (desde la raíz del repo):
@@ -54,15 +54,6 @@ const sinAvisos = (p) => p.waitForFunction(() => !document.querySelector('#aviso
   await p.goto(BACKEND + '?vista=mapacalor', { waitUntil: 'networkidle' });
   await p.waitForTimeout(2500);
   await p.screenshot({ path: archivo('06-reporte-calor-servidor') });
-
-  // Los 3 integrantes en GitHub (Insights → Contributors)
-  // GitHub calcula estas estadísticas aparte: se recarga hasta que dejen de "calcularse".
-  for (let intento = 0; intento < 10; intento++) {
-    await p.goto('https://github.com/JazyelAe/alertavecinal/graphs/contributors', { waitUntil: 'networkidle' });
-    await p.waitForTimeout(6000);
-    if (!/Crunching the latest data/i.test(await p.textContent('body'))) break;
-  }
-  await p.screenshot({ path: archivo('07-contributors'), fullPage: true });
 
   await nav.close();
   console.log('Capturas guardadas en', EVIDENCIAS);

@@ -3,7 +3,7 @@
 Leyenda: ⬜ pendiente · 🟨 en curso · 🛑 esperando revisión · ✅ terminado (fusionado en `main`)
 Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 
-## Estado del repositorio (auditoría del 24/11/2026, noche)
+## Estado del repositorio (auditoría del 25/11/2026)
 - `main` tiene 24 PR fusionados y ninguno abierto. **Luis y Yeudiel terminaron todas sus tareas** (PR #20 a #23, el 24/11).
 - La app abre sin errores en GitHub Pages con todos los módulos: https://jazyelae.github.io/alertavecinal/. Ningún recurso da 404.
 - Los PDF finales están en `entregables/`: Subproducto 4 (PR #9), Subproducto 5 y guía (PR #21), Subproducto 6 (PR #20) y **Producto 2** (PR #24, 35 páginas).
@@ -11,7 +11,8 @@ Entrega del Producto 2: **domingo 29 de noviembre de 2026**.
 - Desde el v4, la app manda el push por `URL_BACKEND` (`Push.gs`); `PUSH_ENDPOINT` queda como respaldo.
 - `firestore.rules` publicadas el 23/11, con foto de la cámara y verificación protegida (PR #14).
 - No hay secretos en el historial (ninguna `BEGIN PRIVATE KEY`).
-- En la gráfica de *Insights → Contributors* aparece también "claude": 8 commits de Jaziel del 21/11 llevan la línea `Co-Authored-By: Claude`.
+- Avance del Producto 2 (sin contar los PDF individuales, que son de cada quien): **~98 %**. La app y la parte de Jaziel están completas; solo quedan las pruebas pendientes de Luis (L-12 a L-17) y Yeudiel (Y-04, Y-13 y Y-14), ya posibles con el backend v4.
+- El documento del Producto 2 no incluye la captura de *Contributors*: en esa gráfica aparece también "claude", porque 8 commits de Jaziel del 21/11 llevan la línea `Co-Authored-By: Claude`.
 
 ## ▶ Lo que falta, por persona (léelo primero)
 
@@ -44,11 +45,12 @@ Ya está en `main`: panel de administración y botón de instalar (PR #3), Vecin
 
 ### Jaziel
 - Unir los Pull Request de Luis y Yeudiel (*Merge pull request* > *Create a merge commit*).
-- ✅ Publicar `firestore.rules` (23/11). ⬜ Probar la cámara en el teléfono.
+- ✅ Publicar `firestore.rules` (23/11) y probar la cámara en el teléfono (24/11).
 - ✅ Despliegue del backend: v3 el 23/11 y **v4 el 24/11** con `Push.gs` y `MapaCalor.gs`.
 - ✅ `docs/producto2/jaziel.md`, `generar_pdf.py` y el PDF del Producto 2 (PR #19 y #24).
-- ⬜ Pruebas con cuenta real y teléfono: J-17 a J-22, y probar el push del backend v4 enviando un aviso "PRUEBA".
-- ⬜ Revisar el PDF del Producto 2 y regenerarlo si alguien actualiza su sección.
+- ✅ Pruebas con cuenta real y teléfono (24/11): push del backend v4 con la app abierta y cerrada, cámara, vibración, compartir, persistencia sin conexión y Alerta sin señal.
+- ✅ PDF del Producto 2 regenerado el 25/11 con esas pruebas. Si Luis o Yeudiel actualizan su sección, se vuelve a generar con `python docs/producto2/generar_pdf.py`.
+- ⬜ Entregar el domingo 29 en Classroom: el PDF del Producto 2 y el enlace del repositorio.
 
 En cada PR, Luis y Yeudiel avisan si Jaziel debe hacer `clasp push` y una nueva implementación.
 
