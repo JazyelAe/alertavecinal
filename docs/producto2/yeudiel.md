@@ -73,14 +73,14 @@ También desarrollé dos partes base de la PWA: el **panel de administración de
 
 ## 4. Reporte de pruebas (casos de Yeudiel)
 
-Solo se marcan ✅ las pruebas que se realizaron. Las que dependen del backend publicado o de un teléfono quedan como **Pendiente**.
+Solo se marcan ✅ las pruebas que se realizaron. Las pruebas Y-04, Y-13, Y-14 e Y-15 se hicieron con la app publicada, el backend v4 y la cuenta real del integrante.
 
 | ID | Requisito | Pasos | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|---|
 | Y-01 | Panel de administración | Abrir `?demo=1` → menú **Administración** | Formulario de avisos y tabla de usuarios con Aprobar, Hacer admin, Suspender y Eliminar | Se muestran ambos con los usuarios de ejemplo (20/11) | ✅ |
 | Y-02 | Verificar domicilio | En Administración (`?demo=1`) pulsar **Verificar domicilio** en un vecino aprobado | Aparece el chip "Domicilio verificado" y el botón cambia a "Quitar verificación" | Correcto con el vecino de ejemplo (23/11) | ✅ |
 | Y-03 | Carga del módulo de instalación | Abrir `?demo=1` con F12 → Console | Ya no aparece el aviso de `js/instalar.js` no disponible | Sin el aviso; en ventana privada el botón no aparece, lo cual es esperado (20/11) | ✅ |
-| Y-04 | Instalación de la PWA | Abrir la URL publicada en Chrome o Edge (ventana normal) → **Instalar app** | Diálogo nativo de instalación y la app abre en su propia ventana | — | Pendiente (prueba manual con captura) |
+| Y-04 | Instalación de la PWA | Abrir la URL publicada en Edge (ventana normal) → **Instalar app** | La app abre en su propia ventana, sin barra del navegador y con ícono en la barra de tareas | Instalada en Edge; abre como "AlertaVecinal - Red de seguridad vecinal" en ventana propia (25/11, Figura de la app instalada) | ✅ |
 | Y-05 | Menú Panel Pro | Abrir `?demo=1` | El menú muestra **Panel Pro** y ya no hay 404 de `js/estadisticas.js` | Correcto (23/11) | ✅ |
 | Y-06 | Indicadores de la colonia | Abrir Panel Pro en `?demo=1` | Alertas del periodo, tipo más frecuente, vecinos, avisos a caseta y gráficas | 40 alertas en 30 días, Robo 48 %, 5 vecinos, gráficas por tipo y horario (23/11) | ✅ |
 | Y-07 | Alertas por vecino | Revisar la tabla **Vecinos más activos** | Alertas, útiles, antigüedad e insignia, sin correos ni ubicaciones | Correcto; sin datos sensibles (23/11) | ✅ |
@@ -89,19 +89,19 @@ Solo se marcan ✅ las pruebas que se realizaron. Las que dependen del backend p
 | Y-10 | Vista de servidor: ficha | `node apps-script/pruebas/prueba_verificado.mjs` | La ficha se genera en el servidor con nombre corto, conteos, insignia y pie "Generado en el servidor" | 12/12 pruebas correctas (23/11) | ✅ |
 | Y-11 | Privacidad de la ficha | Mismo script | El HTML no contiene correo, teléfono, domicilio, descripciones ni coordenadas; uid inválido o pendiente → página genérica | Correcto (23/11) | ✅ |
 | Y-12 | Permisos del backend | Mismo script: `accion_verificar` con vecino, sin token y con admin | Solo el admin verifica; se guarda con hora del servidor | Correcto (23/11) | ✅ |
-| Y-13 | Ficha publicada | Abrir `…/exec?vista=verificado&uid=<uid real>` y ver el código fuente | Datos ya incrustados en el HTML | — | Pendiente (requiere el despliegue con clasp) |
-| Y-14 | Verificación real | Desde Administración con el backend publicado, verificar a un vecino real | El perfil guarda `verificado`, `verificadoEn` y `verificadoPor` | — | Pendiente (requiere el despliegue con clasp) |
+| Y-13 | Ficha publicada | Panel Pro → **Ver mi ficha pública** y ver el código fuente (Ctrl + U) | Ficha con datos reales, pie "Generado en el servidor" y los datos ya incrustados en el HTML | Ficha de "Yeu": 1 alerta, 1 útil, 100 %, Colaborador; el código fuente contiene `<h1>Yeu</h1>` (25/11) | ✅ |
+| Y-14 | Verificación real | El administrador pulsa **Verificar domicilio** en Administración con el backend publicado | La ficha muestra "Domicilio verificado por el comité" con la fecha del servidor | "Domicilio verificado por el comité · Verificado el 24 de noviembre de 2026" (25/11) | ✅ |
+| Y-15 | Panel Pro con datos reales | Enviar una alerta real y abrir **Panel Pro** | Indicadores de la colonia, Mi ficha y Vecinos más activos con datos de Firestore | 14 alertas en 30 días, 6 vecinos; Mi ficha: 1 alerta útil, antigüedad "desde tu registro" (25/11) | ✅ |
 
 ---
 
-## 5. Evidencias sugeridas (capturas para el documento)
+## 5. Evidencias de las características de la PWA (partes de Yeudiel)
 
-| Figura | Qué capturar | Dónde |
-|---|---|---|
-| Panel de administración | Tabla de usuarios con los botones y el chip "Domicilio verificado" | `admin.html?demo=1` |
-| Botón e instalación | Botón **Instalar app**, diálogo de instalación y la app en ventana propia | URL publicada en Chrome o Edge |
-| Panel Pro | Indicadores, Mi ficha y Vecinos más activos | `estadisticas.html?demo=1` |
-| Vista de servidor | Ficha de Vecino Verificado y su código fuente con los datos incrustados | `…/exec?vista=verificado&uid=…` |
+![AlertaVecinal instalada como aplicación en Windows (Edge): abre en su propia ventana, sin barra del navegador. Se muestra el Panel Pro de Vecino Verificado Pro con datos reales de Firestore.](evidencias/yeudiel-01-app-instalada-panel-pro.png)
+
+![Ficha de Vecino Verificado generada en el servidor (Google Apps Script) con datos reales: vecino aprobado, domicilio verificado por el comité, alertas útiles e insignia. El pie indica la hora en que la generó el servidor.](evidencias/yeudiel-02-ficha-servidor.png)
+
+![Código fuente de la ficha (Ctrl + U): el nombre del vecino ya viene escrito en el HTML que envía el servidor, a diferencia de las vistas del cliente.](evidencias/yeudiel-03-ficha-codigo-fuente.png)
 
 ---
 
