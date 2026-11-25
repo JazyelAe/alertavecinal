@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ejemplo mínimo: caché y notificaciones · Yeudiel</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1d3557">
+  <link rel="icon" type="image/png" href="../../../../iconos/icon-192.png">
+  <style>
+    :root { --azul:#1d3557; --rojo:#e63946; --verde:#2a9d8f; --borde:#d7dee8; --suave:#5b6b7f; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,Segoe UI,Roboto,sans-serif; background:#f4f6fa; color:#1b263b; }
+    header { background:var(--azul); color:#fff; padding:.9rem 1rem; font-weight:700; }
+    main { max-width:820px; margin:0 auto; padding:1rem; }
+    h1 { font-size:1.35rem; margin:.4rem 0; }
+    .tarjeta { background:#fff; border:1px solid var(--borde); border-radius:12px; padding:1rem; margin:.8rem 0; }
+    .tarjeta h2 { font-size:1.05rem; margin:0 0 .5rem; }
+    .botones { display:flex; flex-wrap:wrap; gap:.5rem; }
+    button { border:0; border-radius:8px; padding:.55rem .8rem; font-weight:600; cursor:pointer; background:var(--azul); color:#fff; }
+    button.verde { background:var(--verde); } button.rojo { background:var(--rojo); }
+    pre { background:#0f1b2d; color:#d7f9e9; border-radius:8px; padding:.8rem; white-space:pre-wrap; min-height:5rem; font-size:.85rem; }
+    .nota { color:var(--suave); font-size:.9rem; }
+    code { background:#eef2f7; padding:0 .25rem; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <header>AlertaVecinal · Ejemplo mínimo propio (API Cache y notificaciones)</header>
+  <main>
+    <h1>Ejemplo mínimo: API Cache y notificación local</h1>
+    <p class="nota">Página independiente con su propio service worker (<code>sw-ejemplo.js</code>, alcance solo esta carpeta).
+      Cada botón usa uno o más métodos de la API Cache o de notificaciones y escribe el resultado abajo.</p>
+
+    <section class="tarjeta">
+      <h2>1. Service worker</h2>
+      <p id="estado-sw" class="nota">Registrando…</p>
+    </section>
+
+    <section class="tarjeta">
+      <h2>2. API Cache</h2>
+      <div class="botones">
+        <button data-paso="guardar">Guardar (open + addAll + add + put)</button>
+        <button data-paso="listar">Listar (caches.keys + cache.keys)</button>
+        <button data-paso="buscar">Buscar (match + matchAll + caches.match)</button>
+        <button data-paso="existe">caches.has()</button>
+        <button class="rojo" data-paso="borrar">Borrar (cache.delete + caches.delete)</button>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>3. Notificación local</h2>
+      <p class="nota">Pide permiso con <code>Notification.requestPermission()</code> y la muestra el service worker con
+        <code>registration.showNotification()</code>, sin servidor de push.</p>
+      <div class="botones">
+        <button class="verde" data-paso="notificar">Lanzar notificación</button>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Resultado</h2>
+      <pre id="salida">Pulsa un botón.</pre>
+    </section>
+  </main>
+  <script src="ejemplo.js"></script>
+</body>
+</html>

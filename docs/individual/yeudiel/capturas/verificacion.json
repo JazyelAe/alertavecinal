@@ -1,0 +1,44 @@
+{
+  "caches_keys": [
+    "alertavecinal-v7"
+  ],
+  "shell_entradas": 25,
+  "sw_version": "alertavecinal-v7",
+  "sw_estado": "Activado y en ejecución",
+  "pwa": {
+    "https": "https:",
+    "display": "standalone",
+    "start_url": "./?origen=pwa",
+    "iconos": [
+      "192x192 any",
+      "512x512 any",
+      "512x512 maskable"
+    ],
+    "sw_scope": "https://jazyelae.github.io/alertavecinal/",
+    "sw_estado": "activated",
+    "controlada": true,
+    "indexeddb": true,
+    "sync": true,
+    "push": true,
+    "compartir": true,
+    "geolocalizacion": true,
+    "vibracion": true
+  },
+  "backend": {
+    "ok": true,
+    "servicio": "AlertaVecinal Backend",
+    "configurado": true,
+    "vistas": [
+      "boletin",
+      "mapacalor",
+      "verificado"
+    ],
+    "acciones": [
+      "alerta_sin_senal",
+      "push",
+      "verificar"
+    ],
+    "horaServidor": "25/11/2026 13:08:12 hora del centro"
+  },
+  "ejemplo_notificacion": "Permiso: granted\nregistration.showNotification() → OK\ngetNotifications() → 1 visible(s): \"AlertaVecinal · prueba\"\nCuerpo: Fuga de gas reportada en tu colonia. Toca para abrir."
+}

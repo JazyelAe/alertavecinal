@@ -1,0 +1,14 @@
+﻿✅ El estado del backend lista la vista «verificado» y la acción «verificar»
+✅ La ficha tiene título, viewport y el pie «Generado en el servidor»
+✅ Ana: nombre corto, 11 alertas, 9 útiles (82 %), 120 días → insignia Guardián
+✅ Beto: 1 útil y 10 días → Colaborador; nombre de una sola palabra queda igual
+✅ Privacidad: sin correo, teléfono, calle, número, descripciones ni coordenadas en el HTML
+✅ uid inexistente, pendiente, mal formado o ausente → misma página genérica
+✅ accion_verificar: un vecino que no es admin es rechazado y no se guarda nada
+✅ accion_verificar: sin token o con token falso → rechazado
+✅ accion_verificar: el admin verifica a Ana con hora del servidor y su uid
+✅ La ficha de Ana ahora dice «Domicilio verificado por el comité» con la fecha
+✅ accion_verificar: datos inválidos o vecino no aprobado → error claro
+✅ accion_verificar: el admin puede quitar la verificación
+
+12/12 pruebas correctas
