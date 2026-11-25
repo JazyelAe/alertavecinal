@@ -43,7 +43,7 @@ Proyecto del **Producto 2 · Unidad II** de *Aplicaciones Web Progresivas* · Pr
 |---|---|
 | ![Boletín público](docs/producto2/evidencias/jaziel-09-boletin.png) | ![Código fuente del boletín](docs/producto2/evidencias/jaziel-10-boletin-codigo-fuente.png) |
 
-### Pruebas manuales de Luis en un celular Android (cuenta real, 25/11/2026)
+### Pruebas manuales de Luis en un celular Android 
 
 | Mapa de alertas | «Ver en el mapa» con la dirección de Nominatim | Mapa de calor de incidentes |
 |---|---|---|
