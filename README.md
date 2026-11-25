@@ -43,6 +43,20 @@ Proyecto del **Producto 2 · Unidad II** de *Aplicaciones Web Progresivas* · Pr
 |---|---|
 | ![Boletín público](docs/producto2/evidencias/jaziel-09-boletin.png) | ![Código fuente del boletín](docs/producto2/evidencias/jaziel-10-boletin-codigo-fuente.png) |
 
+### Pruebas manuales de Luis en un celular Android (cuenta real, 25/11/2026)
+
+| Mapa de alertas | «Ver en el mapa» con la dirección de Nominatim | Mapa de calor de incidentes |
+|---|---|---|
+| ![Mapa de alertas con la leyenda de tipos](docs/producto2/evidencias/luis-01-mapa-alertas.jpg) | ![Ventana de una alerta con su dirección](docs/producto2/evidencias/luis-02-ver-en-mapa.jpg) | ![Mapa de calor con todos los tipos](docs/producto2/evidencias/luis-03-mapa-calor.jpg) |
+
+| Mapa de calor filtrado por «Robo» | Notificación push con la app cerrada | La alerta que generó esa notificación |
+|---|---|---|
+| ![Mapa de calor filtrado por robo](docs/producto2/evidencias/luis-04-filtro-robo.jpg) | ![Notificación del sistema de AlertaVecinal](docs/producto2/evidencias/luis-05-push-app-cerrada.jpg) | ![Alerta de robo en la lista en tiempo real](docs/producto2/evidencias/luis-06-alerta-que-genero-el-push.jpg) |
+
+| Reporte de mapa de calor generado en el servidor | Zonas con más alertas (agregadas en Apps Script) |
+|---|---|
+| ![Reporte de mapa de calor en Apps Script](docs/producto2/evidencias/luis-07-reporte-calor-servidor.jpg) | ![Tabla de zonas con más alertas](docs/producto2/evidencias/luis-08-reporte-calor-zonas.jpg) |
+
 Más evidencias en [`docs/producto2/evidencias/`](docs/producto2/evidencias/).
 
 ---
