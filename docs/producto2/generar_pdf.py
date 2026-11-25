@@ -51,6 +51,9 @@ def leer_secciones(ruta):
     partes, referencias, actual = {}, [], None
     for linea in open(ruta, encoding="utf-8").read().splitlines():
         m = re.match(r"^##\s+(\d+)\.", linea)
+        if m and re.search(r"sugerid", linea, re.I):
+            actual = None  # "Evidencias sugeridas": notas para el coordinador, no van en el documento
+            continue
         if m:
             actual = int(m.group(1))
             partes.setdefault(actual, [])

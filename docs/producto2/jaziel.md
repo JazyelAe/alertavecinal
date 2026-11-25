@@ -191,6 +191,21 @@ Las pruebas J-01 a J-16 se ejecutaron el **23/11/2026** con Playwright sobre la 
 
 ![Código fuente del boletín: los datos ya vienen dentro del HTML que genera el servidor.](evidencias/jaziel-10-boletin-codigo-fuente.png)
 
+### Funciones de Luis y Yeudiel
+Capturas tomadas por el coordinador sobre la app publicada (`docs/producto2/pruebas/evidencias_equipo.js`), siguiendo las evidencias que propusieron Luis y Yeudiel en sus secciones.
+
+![Mapa de alertas (Luis): un punto de color por alerta y la ventana con la dirección obtenida de Nominatim.](evidencias/equipo-01-mapa-alertas.png)
+
+![Mapa de calor de incidentes (Luis): las zonas rojas concentran más alertas; se filtra por tipo y fechas.](evidencias/equipo-02-mapa-calor.png)
+
+![Demo de notificaciones push (Luis): estado del permiso, service worker activo, token FCM y notificación local de prueba.](evidencias/equipo-03-demo-push.png)
+
+![Reporte de mapa de calor generado en el servidor de Apps Script (Luis), con las alertas agrupadas en zonas de unos 500 m.](evidencias/equipo-06-reporte-calor-servidor.png)
+
+![Panel de administración (Yeudiel): avisos a todos los vecinos y usuarios con aprobar, verificar domicilio, suspender y eliminar.](evidencias/equipo-04-administracion.png)
+
+![Panel Pro de Vecino Verificado Pro (Yeudiel): indicadores de la colonia, ficha del vecino, vecinos más activos y gráficas.](evidencias/equipo-05-panel-pro.png)
+
 ---
 
 ## 6. Vínculos
@@ -203,6 +218,9 @@ Las pruebas J-01 a J-16 se ejecutaron el **23/11/2026** con Playwright sobre la 
 | Integrantes y sus commits | https://github.com/JazyelAe/alertavecinal/graphs/contributors |
 | Backend (estado) | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec |
 | Vista de servidor: boletín | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec?vista=boletin |
+| Vista de servidor: reporte de mapa de calor | https://script.google.com/macros/s/AKfycbyA-8YNUHxTZ0XILx0vCNW0PV-lX_SlT-zDDEMG_7wUcgRelPpH_9_MfC0GzfSZihiJkg/exec?vista=mapacalor |
+
+![Insights → Contributors del repositorio: los commits de cada integrante en la rama main.](evidencias/equipo-07-contributors.png)
 
 ---
 

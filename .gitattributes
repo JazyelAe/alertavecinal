@@ -1,0 +1,4 @@
+# Los PDF y las imágenes nunca se tratan como texto (no se cambian sus saltos de línea).
+*.pdf binary
+*.png binary
+*.jpg binary
